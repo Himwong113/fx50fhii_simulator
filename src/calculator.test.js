@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { calculate, calculatorReducer, initialState } from './calculator.js';
+import { SCIENTIFIC_CONSTANTS, displayConstants } from './constants.js';
 
 test('arithmetic follows precedence and supports parentheses, decimals, powers and Ans', () => {
   assert.equal(calculate('2+3×4'), 14);
@@ -208,4 +209,66 @@ test('power input uses a grouped exponent and accepts an omitted final closing p
   state = calculatorReducer(state, executeKey);
   assert.equal(state.expression, '2^(3');
   assert.equal(state.result, '8');
+});
+
+const openConstants = state => calculatorReducer(calculatorReducer(state, shiftKey), { label: '7', value: '7' });
+const pageRight = { label: '▶', action: 'replay', direction: 'right' };
+const pageLeft = { label: '◀', action: 'replay', direction: 'left' };
+
+test('SHIFT 7 opens ten pages of four constants, with wrapping and numeric selection', () => {
+  assert.equal(calculatorReducer(initialState, { label: '7', value: '7' }).expression, '7');
+  assert.equal(SCIENTIFIC_CONSTANTS.length, 40);
+  assert.deepEqual(SCIENTIFIC_CONSTANTS.slice(0, 4).map(c => c.symbol), ['mp', 'mn', 'me', 'mμ']);
+  let menu = openConstants(initialState);
+  assert.equal(menu.constantPage, 0);
+  assert.equal(menu.modifier, '');
+  assert.equal(calculatorReducer(menu, pageLeft).constantPage, 9);
+  for (let page = 0; page < 10; page++) {
+    assert.equal(menu.constantPage, page);
+    for (let choice = 1; choice <= 4; choice++) {
+      const entry = SCIENTIFIC_CONSTANTS[page * 4 + choice - 1];
+      let state = calculatorReducer(menu, { label: String(choice), value: String(choice) });
+      assert.equal(state.constantPage, null);
+      assert.equal(displayConstants(state.expression), entry.symbol);
+      state = calculatorReducer(state, executeKey);
+      assert.equal(state.answer, Number(Number(entry.value).toPrecision(12)), entry.name);
+    }
+    menu = calculatorReducer(menu, pageRight);
+  }
+  assert.equal(menu.constantPage, 0);
+});
+
+test('manual constants examples evaluate with symbols and omitted multiplication', () => {
+  let state = openConstants(initialState);
+  for (let i = 0; i < 4; i++) state = calculatorReducer(state, pageLeft);
+  state = calculatorReducer(state, { label: '4', value: '4' });
+  assert.equal(displayConstants(state.expression), 'c₀');
+  state = calculatorReducer(state, executeKey);
+  assert.equal(state.result, '299792458');
+  assert.equal(calculate('1÷√([32][33])'), 299792458);
+  assert.equal(calculate('2[28]'), 599584916);
+  assert.equal(calculate('[28](2)'), 599584916);
+  assert.equal(calculate('2[23]3'), 9.61305939e-19);
+  assert.throws(() => calculate('[99]'), /Syntax ERROR/);
+});
+
+test('constants menu preserves input, cancels, starts a new expression and deletes atomically', () => {
+  let state = calculatorReducer(initialState, { label: '2', value: '2' });
+  state = calculatorReducer(state, { label: '+', value: '+' });
+  let menu = openConstants(state);
+  assert.equal(calculatorReducer(menu, { label: '9', value: '9' }).constantPage, 0);
+  let cancelled = calculatorReducer(menu, { label: 'AC', action: 'clear' });
+  assert.equal(cancelled.constantPage, null);
+  assert.equal(cancelled.expression, '2+');
+  state = calculatorReducer(menu, { label: 'mp', action: 'constant-select', choice: 1 });
+  assert.equal(displayConstants(state.expression), '2+mp');
+  state = calculatorReducer(state, { label: 'DEL', action: 'delete' });
+  assert.equal(state.expression, '2+');
+  state = enterFractionExpression('2+3');
+  menu = openConstants(state);
+  cancelled = calculatorReducer(menu, { label: 'AC', action: 'clear' });
+  assert.equal(cancelled.result, '5');
+  assert.equal(cancelled.evaluated, true);
+  state = calculatorReducer(menu, { label: '1', value: '1' });
+  assert.equal(displayConstants(state.expression), 'mp');
 });

@@ -1,4 +1,5 @@
 import { fraction, fromDecimal, numeric, negate, serialize, binary, squareRoot, formatFraction } from './fractions.js';
+import { SCIENTIFIC_CONSTANTS, CONSTANT_PAGE_COUNT } from './constants.js';
 
 // A small arithmetic parser: no eval or generated JavaScript.
 export function evaluate(expression, answer = 0, answerFraction = null, answerMode = 'decimal') {
@@ -35,6 +36,14 @@ export function evaluate(expression, answer = 0, answerFraction = null, answerMo
       return answerFraction ? fraction(answerFraction.n, answerFraction.d) : fromDecimal(String(answer));
     }
     if (source[position] === 'π') { position++; containsDecimal = true; return Math.PI; }
+    const constantMatch = source.slice(position).match(/^\[(\d{2})\]/);
+    if (constantMatch) {
+      const constant = SCIENTIFIC_CONSTANTS[Number(constantMatch[1]) - 1];
+      if (!constant) throw new Error('Syntax ERROR');
+      position += constantMatch[0].length;
+      containsDecimal = true;
+      return fromDecimal(constant.value);
+    }
     const parts = [number()];
     while (source[position] === '┘' && parts.length < 3) {
       position++; containsFraction = true; parts.push(number());
@@ -52,8 +61,8 @@ export function evaluate(expression, answer = 0, answerFraction = null, answerMo
     let value = power();
     while (true) {
       const next = source[position] || '';
-      const startsNamedFactor = next === '(' || next === 'π' || source.startsWith('√(', position) || source.startsWith('Ans', position);
-      const followsClosedValue = source[position - 1] === ')' || source[position - 1] === 'π' || source.slice(0, position).endsWith('Ans');
+      const startsNamedFactor = next === '(' || next === '[' || next === 'π' || source.startsWith('√(', position) || source.startsWith('Ans', position);
+      const followsClosedValue = source[position - 1] === ')' || source[position - 1] === ']' || source[position - 1] === 'π' || source.slice(0, position).endsWith('Ans');
       if (!startsNamedFactor && !(followsClosedValue && /[\d.]/.test(next))) break;
       value = binary('*', value, power());
     }
@@ -90,6 +99,7 @@ export function calculate(expression, answer = 0) {
 export const initialState = {
   expression: '', result: '0', answer: 0, answerFraction: null, answerMode: 'decimal',
   resultMode: 'decimal', fractionStyle: 'improper', evaluated: false, modifier: '',
+  constantPage: null,
   lastKey: '—', notice: 'Ready for your first calculation.', history: [],
 };
 
@@ -102,6 +112,30 @@ function changeResult(state, result, resultMode) {
 
 export function calculatorReducer(state, key) {
   const next = { ...state, lastKey: key.label, notice: '' };
+  if (state.constantPage != null) {
+    if (['clear', 'on', 'delete'].includes(key.action) || (state.modifier === 'SHIFT' && key.label === 'Prog')) {
+      return { ...next, constantPage: null, modifier: '', notice: 'Constants menu closed.' };
+    }
+    if (key.action === 'modifier') return { ...next, modifier: state.modifier === key.label ? '' : key.label };
+    if (key.action === 'replay' && ['left', 'right'].includes(key.direction)) {
+      const offset = key.direction === 'right' ? 1 : -1;
+      return { ...next, constantPage: (state.constantPage + offset + CONSTANT_PAGE_COUNT) % CONSTANT_PAGE_COUNT, modifier: '' };
+    }
+    const choice = key.action === 'constant-select' ? key.choice : /^[1-4]$/.test(key.value ?? '') ? Number(key.value) : null;
+    if (Number.isInteger(choice) && choice >= 1 && choice <= 4) {
+      const constant = SCIENTIFIC_CONSTANTS[state.constantPage * 4 + choice - 1];
+      const expression = state.evaluated ? '' : state.expression;
+      if (expression.length + constant.token.length > 80) return { ...next, notice: 'Expression limit reached.' };
+      return {
+        ...next, expression: expression + constant.token, constantPage: null, modifier: '',
+        evaluated: false, result: '0', resultMode: 'decimal', notice: `${constant.symbol}: ${constant.name} (${constant.unit || 'dimensionless'}).`,
+      };
+    }
+    return { ...next, notice: 'Use ◀/▶ to change page, then 1–4 to select. AC cancels.' };
+  }
+  if (state.modifier === 'SHIFT' && key.value === '7') {
+    return { ...next, constantPage: 0, modifier: '', notice: 'Choose a constant with 1–4. Use ◀/▶ for more.' };
+  }
   if (key.action === 'clear' || key.action === 'on') return {
     ...initialState, answer: state.answer, answerFraction: state.answerFraction, answerMode: state.answerMode,
     fractionStyle: state.fractionStyle, history: state.history, lastKey: key.label,
@@ -132,7 +166,7 @@ export function calculatorReducer(state, key) {
     return { ...current, expression: state.expression + '┘', result: '0', resultMode: 'decimal' };
   }
   if (key.action === 'delete') {
-    const suffixLength = state.expression.endsWith('Ans') ? 3 : /(?:⁻¹|√\(|\^\()$/.test(state.expression) ? 2 : 1;
+    const suffixLength = /\[\d{2}\]$/.test(state.expression) ? 4 : state.expression.endsWith('Ans') ? 3 : /(?:⁻¹|√\(|\^\()$/.test(state.expression) ? 2 : 1;
     return { ...next, expression: state.expression.slice(0, -suffixLength), evaluated: false, result: '0', resultMode: 'decimal' };
   }
   if (key.action === 'execute') {

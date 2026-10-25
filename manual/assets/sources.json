@@ -1,0 +1,1616 @@
+{
+  "title": "Casio fx-50FH II 用戶說明書",
+  "language": "zh-Hant",
+  "source": {
+    "title": "Casio fx-50FH II User Guide",
+    "source": "https://www.bilibili.com/opus/647767702107062279",
+    "scans": [
+      {
+        "scan": 1,
+        "file": "01.png",
+        "url": "https://i0.hdslb.com/bfs/article/a00b096ed116e83e006153f8180972c37bbbe681.png",
+        "size": [
+          4286,
+          3041
+        ],
+        "bytes": 250611,
+        "sha256": "2a2eab41148457b9a7a2c44950348d537a57eb3e04053e144aefd24acf071865"
+      },
+      {
+        "scan": 2,
+        "file": "02.png",
+        "url": "https://i0.hdslb.com/bfs/article/327e8face8ab367ecd4dfff5e9096990e61af085.png",
+        "size": [
+          4286,
+          3041
+        ],
+        "bytes": 336710,
+        "sha256": "ed3b1a3cafd2e1255a25ae63a4b434bd39132deed613034d1c5cd37c3eda7efe"
+      },
+      {
+        "scan": 3,
+        "file": "03.png",
+        "url": "https://i0.hdslb.com/bfs/article/4cca0e779e72d63e84b755d64fd77b8a7164c8e2.png",
+        "size": [
+          4286,
+          3041
+        ],
+        "bytes": 343479,
+        "sha256": "6bc640b7696628ed7db00efb25e69b7ab594ffca49b8ee9f3d43486569fea38b"
+      },
+      {
+        "scan": 4,
+        "file": "04.png",
+        "url": "https://i0.hdslb.com/bfs/article/3dc278002ae14d22e3062a7e7bb4e77175d1ac08.png",
+        "size": [
+          4286,
+          3041
+        ],
+        "bytes": 311634,
+        "sha256": "56adb0644b2daf4861635a9516fb954477daa37e078fcaa304507bb1a9b62ee2"
+      },
+      {
+        "scan": 5,
+        "file": "05.png",
+        "url": "https://i0.hdslb.com/bfs/article/00933919407a1942c6325a29b60e995ae3f8afbf.png",
+        "size": [
+          4286,
+          3041
+        ],
+        "bytes": 275212,
+        "sha256": "a1a178f44628915793af8c31fc7d67451b1f56798f7683c62c5e6f63d77a1521"
+      },
+      {
+        "scan": 6,
+        "file": "06.png",
+        "url": "https://i0.hdslb.com/bfs/article/ee71c1fc9fb17c802d5161b18d15a9b233076c0b.png",
+        "size": [
+          4286,
+          3041
+        ],
+        "bytes": 314106,
+        "sha256": "baee4d056db5bd422579331ae0ec111fc4ec6d7ce910b92e1c821ef54ddca611"
+      },
+      {
+        "scan": 7,
+        "file": "07.png",
+        "url": "https://i0.hdslb.com/bfs/article/b68f84ee40ed4783acd67e766be804fab1b170cd.png",
+        "size": [
+          4286,
+          3041
+        ],
+        "bytes": 252441,
+        "sha256": "2548a8129106c18a049b0e03085d8f75c4dd3562685a8f1dd15fd73ae6ac3fac"
+      },
+      {
+        "scan": 8,
+        "file": "08.png",
+        "url": "https://i0.hdslb.com/bfs/article/f5ead88a20f4b4a4d9d92d233730e9a488ba57b2.png",
+        "size": [
+          4286,
+          3041
+        ],
+        "bytes": 249573,
+        "sha256": "a8bb3d3fab41080662baa85ea69e80b62fd58c69aff296243c5c359c95ca3039"
+      },
+      {
+        "scan": 9,
+        "file": "09.png",
+        "url": "https://i0.hdslb.com/bfs/article/fd71927033320d8dcd0be9bdb2764a327c04389b.png",
+        "size": [
+          4286,
+          3041
+        ],
+        "bytes": 289289,
+        "sha256": "052c7b1bd3e907de27f30cbe004703cc6905d6f836d0433b87d246a3489514e4"
+      },
+      {
+        "scan": 10,
+        "file": "10.png",
+        "url": "https://i0.hdslb.com/bfs/article/b2d89649b64fa1d0791f2af635aacf2da100d2c0.png",
+        "size": [
+          4286,
+          3041
+        ],
+        "bytes": 323038,
+        "sha256": "fe0f7a808a24110927ac0ec9e729868c314c3a3477349cef2714285e4a974d34"
+      },
+      {
+        "scan": 11,
+        "file": "11.png",
+        "url": "https://i0.hdslb.com/bfs/article/fa18a062150f6eecd95098a8608a5eb0b8395616.png",
+        "size": [
+          4286,
+          3041
+        ],
+        "bytes": 298926,
+        "sha256": "3c1b6aa05c638bb500699b00172582af8f28e89e534846e1136d203bb80cfe38"
+      },
+      {
+        "scan": 12,
+        "file": "12.png",
+        "url": "https://i0.hdslb.com/bfs/article/2687cf3888de501580d63a156abfbfd54593169e.png",
+        "size": [
+          4286,
+          3041
+        ],
+        "bytes": 313344,
+        "sha256": "991ebc406835bf990270ed41d6c1f0afd5e81bbd97d338a1642b9172c8297bf3"
+      },
+      {
+        "scan": 13,
+        "file": "13.png",
+        "url": "https://i0.hdslb.com/bfs/article/0f095c3e6d5f6e3cbeefc0aa006c70733bf51fb1.png",
+        "size": [
+          4286,
+          3041
+        ],
+        "bytes": 300438,
+        "sha256": "e1cd8f3982b8987f44851a5f1e1475b3ccfd69327d5ee3ee56b8ef018be0f621"
+      },
+      {
+        "scan": 14,
+        "file": "14.png",
+        "url": "https://i0.hdslb.com/bfs/article/98415619cdb633ca1abdd9b7c4492722fc77644c.png",
+        "size": [
+          4286,
+          3041
+        ],
+        "bytes": 304650,
+        "sha256": "3834bef109b7e90974e83196f5b13d81f835c0e4831cf74a093d888e886c0e46"
+      },
+      {
+        "scan": 15,
+        "file": "15.png",
+        "url": "https://i0.hdslb.com/bfs/article/724da15ea504c557bbddf84b3f2ca83491bfce4e.png",
+        "size": [
+          4286,
+          3041
+        ],
+        "bytes": 282540,
+        "sha256": "f6e7df94b2b22a42076825829aa82f7e318967dc860c5eb812d1378f9eb9207e"
+      },
+      {
+        "scan": 16,
+        "file": "16.png",
+        "url": "https://i0.hdslb.com/bfs/article/097a38d59c6c5603cb16758e5d9c25f09463a54d.png",
+        "size": [
+          4286,
+          3041
+        ],
+        "bytes": 264500,
+        "sha256": "da0420fecb6d311b7ef1cd2f2f512ba89c4bed82b6e0cc5e7ef3f7b716c0ddf7"
+      },
+      {
+        "scan": 17,
+        "file": "17.png",
+        "url": "https://i0.hdslb.com/bfs/article/a94f862ebf579c99a2c11f25a6e659a831908507.png",
+        "size": [
+          4286,
+          3041
+        ],
+        "bytes": 271199,
+        "sha256": "d5c7f4ce6b5f54be176f956e1a86ae596c96a2f0342916e4bb0b1a50f8711dee"
+      },
+      {
+        "scan": 18,
+        "file": "18.png",
+        "url": "https://i0.hdslb.com/bfs/article/c508d78a89aac5915078c3d8a4222bd83e27015a.png",
+        "size": [
+          4286,
+          3041
+        ],
+        "bytes": 285791,
+        "sha256": "54fa5ce96ca12bfe53f1f89e352dafebe4a681a60209ff71339afb9cebf7842d"
+      },
+      {
+        "scan": 19,
+        "file": "19.png",
+        "url": "https://i0.hdslb.com/bfs/article/b0ddbf3efddb1a231e0a2d5c0377166d258dd5be.png",
+        "size": [
+          4286,
+          3041
+        ],
+        "bytes": 283274,
+        "sha256": "58572ab5f50e3cf0414f394c645e5b5bed1f510c0bdbdf690e053bed63ab88aa"
+      },
+      {
+        "scan": 20,
+        "file": "20.png",
+        "url": "https://i0.hdslb.com/bfs/article/0c4d7e13077a66ccb0b84c2dcefcd86a1c529424.png",
+        "size": [
+          4286,
+          3041
+        ],
+        "bytes": 300557,
+        "sha256": "ad51be2f8623952435ac7eae48d457b7a83e1806ac4d1a11efc3e91d4501dc02"
+      },
+      {
+        "scan": 21,
+        "file": "21.png",
+        "url": "https://i0.hdslb.com/bfs/article/d020d60756641b72559f026347efe192a208fc7b.png",
+        "size": [
+          4286,
+          3041
+        ],
+        "bytes": 336055,
+        "sha256": "4f6008b57fc6c2a357fc3aa848e9e5c3e85dc7d23f615f28002536c084a3284a"
+      },
+      {
+        "scan": 22,
+        "file": "22.png",
+        "url": "https://i0.hdslb.com/bfs/article/cd4e861c5f0b6fd4e06f158dba5e06a076317cdd.png",
+        "size": [
+          4286,
+          3041
+        ],
+        "bytes": 374900,
+        "sha256": "e5cd9cc2c93034c7022476ed1c92eba66bb13b6db0771fd042d39f5b9b38fdc4"
+      },
+      {
+        "scan": 23,
+        "file": "23.png",
+        "url": "https://i0.hdslb.com/bfs/article/bf2291b263993b5a12ca7202e6e4e02340e9ad83.png",
+        "size": [
+          4286,
+          3041
+        ],
+        "bytes": 315856,
+        "sha256": "3e6798c947ad4158f0a1359bf0774ffee5c5b6d4d9fb9481d22b90ce9532f18f"
+      },
+      {
+        "scan": 24,
+        "file": "24.png",
+        "url": "https://i0.hdslb.com/bfs/article/9f8565c63eab35656fac1bf32d374cebc416cf8e.png",
+        "size": [
+          4286,
+          3041
+        ],
+        "bytes": 315496,
+        "sha256": "4e3f1771a59951bcd75ce4fd2d58e836f56723332b8b3d1f611308d4e9708e4b"
+      },
+      {
+        "scan": 25,
+        "file": "25.png",
+        "url": "https://i0.hdslb.com/bfs/article/b6b4e639bf482eb2166484f19d6b793d9ff63b4e.png",
+        "size": [
+          4286,
+          3041
+        ],
+        "bytes": 279088,
+        "sha256": "e3fb450444a929e68c9e3b2a3c62f0253e33b733108fdd638197f376c12a17bb"
+      },
+      {
+        "scan": 26,
+        "file": "26.png",
+        "url": "https://i0.hdslb.com/bfs/article/fa7b56e86613c67708b63aa268003e62d653cea3.png",
+        "size": [
+          4286,
+          3041
+        ],
+        "bytes": 231441,
+        "sha256": "7e22db9100e5b70b86da8bb8e0708f6998605bf3a72e8909579b05978c9116cf"
+      },
+      {
+        "scan": 27,
+        "file": "27.png",
+        "url": "https://i0.hdslb.com/bfs/article/d1dd952a6d72873bb4d29cbb7dab3b9abc870dd6.png",
+        "size": [
+          4286,
+          3041
+        ],
+        "bytes": 254084,
+        "sha256": "ea11c37112189c469d25ec5f3d943d62083cd5e10cba1bdadaf54faec503fa08"
+      },
+      {
+        "scan": 28,
+        "file": "28.png",
+        "url": "https://i0.hdslb.com/bfs/article/6aa7e192ac90e1fb379df4376f899d20aa8f8e49.png",
+        "size": [
+          4286,
+          3041
+        ],
+        "bytes": 269730,
+        "sha256": "0ccf84bd98a7c70da509b1b3a7633991928bfd02f477f57ff2d3823a782536b3"
+      },
+      {
+        "scan": 29,
+        "file": "29.png",
+        "url": "https://i0.hdslb.com/bfs/article/4475cd2c98d59b3dc9816fb339434ddfa2538849.png",
+        "size": [
+          4286,
+          3041
+        ],
+        "bytes": 339254,
+        "sha256": "7658cad1858674146a44cccc77ef6ae5e7184406ff3d543f590e4e029593d6cb"
+      },
+      {
+        "scan": 30,
+        "file": "30.png",
+        "url": "https://i0.hdslb.com/bfs/article/9996d011b7496cf70c574525f3ed769b768da9e6.png",
+        "size": [
+          4286,
+          3041
+        ],
+        "bytes": 338425,
+        "sha256": "a1ea812d43824dc3c7c1433dca32a44b19b2b01e7aa472da01e77970499c9da4"
+      },
+      {
+        "scan": 31,
+        "file": "31.png",
+        "url": "https://i0.hdslb.com/bfs/article/821a96e82a8d701a0c5056996e9853c29b502f5d.png",
+        "size": [
+          4286,
+          3041
+        ],
+        "bytes": 316845,
+        "sha256": "e6a9b6d88fe5717d6258120959a6b2ea4fa9b3ff3e57b0b4aee17de789e120be"
+      },
+      {
+        "scan": 32,
+        "file": "32.png",
+        "url": "https://i0.hdslb.com/bfs/article/d58766a39a21b780e707b6f1043192329b080a3e.png",
+        "size": [
+          4286,
+          3041
+        ],
+        "bytes": 327055,
+        "sha256": "64677bb177fac632b1f2b4084709c2c394a3d521fc88b634f9688fcf5fa8f18d"
+      },
+      {
+        "scan": 33,
+        "file": "33.png",
+        "url": "https://i0.hdslb.com/bfs/article/78c29f09c759431bde14fee34812102c138901d8.png",
+        "size": [
+          4286,
+          3041
+        ],
+        "bytes": 271598,
+        "sha256": "4c112246c4996f0cfb6aff406d87ace1b3f60cddaf89219c439e438677c6264e"
+      },
+      {
+        "scan": 34,
+        "file": "34.png",
+        "url": "https://i0.hdslb.com/bfs/article/153bbafc94e47ffe842014efd219d18c8695d553.png",
+        "size": [
+          4286,
+          3041
+        ],
+        "bytes": 257296,
+        "sha256": "e00df4eab903a5fc69c2110a6e3b8c39faf73edf4a5e623aeec8f6b733a6ee51"
+      },
+      {
+        "scan": 35,
+        "file": "35.png",
+        "url": "https://i0.hdslb.com/bfs/article/e0de2c8e99bca3194beeb9836325b44aed011584.png",
+        "size": [
+          4286,
+          3041
+        ],
+        "bytes": 247128,
+        "sha256": "4f7f65c53391fdd7ab8cec2ed5e422811a7b4b3a4589f1d0bfc765820678d97d"
+      },
+      {
+        "scan": 36,
+        "file": "36.png",
+        "url": "https://i0.hdslb.com/bfs/article/39e209704eca983ca5aa6e42502c90b422051698.png",
+        "size": [
+          4286,
+          3041
+        ],
+        "bytes": 302016,
+        "sha256": "54c8b6fd6a606dc86629bc7d2959b1cab68458261349ca175d635c505348cee4"
+      },
+      {
+        "scan": 37,
+        "file": "37.png",
+        "url": "https://i0.hdslb.com/bfs/article/fc9401671af76fd3c80d2fdeabe50fb9628890d2.png",
+        "size": [
+          4286,
+          3041
+        ],
+        "bytes": 161567,
+        "sha256": "864b9c34335689aef970dd54058d177b49df23aaeb248c6b2854db27df4259ed"
+      },
+      {
+        "scan": 38,
+        "file": "38.png",
+        "url": "https://i0.hdslb.com/bfs/article/9e94b7582ee33078603c509705805d7266647bd8.png",
+        "size": [
+          4286,
+          3041
+        ],
+        "bytes": 92183,
+        "sha256": "1ded426784db9259016de4d9b1b5932ee2da0e234bb97aa241c41f84d00a1754"
+      },
+      {
+        "scan": 39,
+        "file": "39.png",
+        "url": "https://i0.hdslb.com/bfs/article/2f1141d77fafb09864bd037f161e32a134d1aefd.png",
+        "size": [
+          4286,
+          3041
+        ],
+        "bytes": 122215,
+        "sha256": "ab57d7e7aa4a8b697aff980589926080b07cfdf6bf8cef377103cc6d2b780cdf"
+      },
+      {
+        "scan": 40,
+        "file": "40.png",
+        "url": "https://i0.hdslb.com/bfs/article/eb115624fe22e8400bede73182e444e0f6573861.png",
+        "size": [
+          4286,
+          3041
+        ],
+        "bytes": 145355,
+        "sha256": "4c2316c51a4508e5b7cde8b07530deff4aca5dd0361e5c572c74579d6a3a1cf3"
+      }
+    ]
+  },
+  "conversion": {
+    "engine": "Tesseract 5.5.0",
+    "models": "tessdata_best chi_tra+eng (including chi_tra_vert)",
+    "page_segmentation_mode": 3,
+    "method": "Searchable OCR prose; original image excerpts for tables, formulas, key sequences and uncertain recognition; complete source region attached to every page.",
+    "accuracy": "OCR prose has not been exhaustively proofread. Image excerpts and source regions preserve the original notation. Main chapter boundaries and contents headings were checked visually.",
+    "statistics": {
+      "inline_symbols": 1242,
+      "excerpts": 405,
+      "text_lines": 601
+    },
+    "manually_transcribed_sections": [
+      "01-preparation.md",
+      "02-safety.md",
+      "03-handling.md",
+      "04-before-calculating.md",
+      "05-modes-and-setup.md",
+      "12-engineering-notation.md",
+      "19-power-supply.md",
+      "20-specifications.md"
+    ]
+  },
+  "sections": [
+    {
+      "file": "01-preparation.md",
+      "title": "事前準備",
+      "regions": [
+        {
+          "page": 1,
+          "scan": 2,
+          "side": "left",
+          "crop": [
+            0,
+            0,
+            2143,
+            2060
+          ],
+          "image": "assets/pages/01-preparation-ch-01.png"
+        }
+      ]
+    },
+    {
+      "file": "02-safety.md",
+      "title": "安全須知",
+      "regions": [
+        {
+          "page": 1,
+          "scan": 2,
+          "side": "left",
+          "crop": [
+            0,
+            2060,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/02-safety-ch-01.png"
+        }
+      ]
+    },
+    {
+      "file": "03-handling.md",
+      "title": "操作須知",
+      "regions": [
+        {
+          "page": 2,
+          "scan": 2,
+          "side": "right",
+          "crop": [
+            0,
+            0,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/03-handling-ch-02.png"
+        }
+      ]
+    },
+    {
+      "file": "04-before-calculating.md",
+      "title": "在開始進行計算之前",
+      "regions": [
+        {
+          "page": 5,
+          "scan": 4,
+          "side": "left",
+          "crop": [
+            0,
+            0,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/04-before-calculating-ch-05.png"
+        },
+        {
+          "page": 6,
+          "scan": 4,
+          "side": "right",
+          "crop": [
+            0,
+            0,
+            2143,
+            1690
+          ],
+          "image": "assets/pages/04-before-calculating-ch-06.png"
+        }
+      ],
+      "transcription": "Manually transcribed and visually checked against the supplied scans."
+    },
+    {
+      "file": "05-modes-and-setup.md",
+      "title": "計算模式及設置",
+      "regions": [
+        {
+          "page": 6,
+          "scan": 4,
+          "side": "right",
+          "crop": [
+            0,
+            1690,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/05-modes-and-setup-ch-06.png"
+        },
+        {
+          "page": 7,
+          "scan": 5,
+          "side": "left",
+          "crop": [
+            0,
+            0,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/05-modes-and-setup-ch-07.png"
+        },
+        {
+          "page": 8,
+          "scan": 5,
+          "side": "right",
+          "crop": [
+            0,
+            0,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/05-modes-and-setup-ch-08.png"
+        }
+      ],
+      "transcription": "Manually transcribed and visually checked against the supplied scans."
+    },
+    {
+      "file": "06-expression-input.md",
+      "title": "算式及數值的輸入",
+      "regions": [
+        {
+          "page": 9,
+          "scan": 6,
+          "side": "left",
+          "crop": [
+            0,
+            0,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/06-expression-input-ch-09.png"
+        },
+        {
+          "page": 10,
+          "scan": 6,
+          "side": "right",
+          "crop": [
+            0,
+            0,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/06-expression-input-ch-10.png"
+        },
+        {
+          "page": 11,
+          "scan": 7,
+          "side": "left",
+          "crop": [
+            0,
+            0,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/06-expression-input-ch-11.png"
+        },
+        {
+          "page": 12,
+          "scan": 7,
+          "side": "right",
+          "crop": [
+            0,
+            0,
+            2143,
+            1830
+          ],
+          "image": "assets/pages/06-expression-input-ch-12.png"
+        }
+      ]
+    },
+    {
+      "file": "07-basic-calculations.md",
+      "title": "基本計算",
+      "regions": [
+        {
+          "page": 12,
+          "scan": 7,
+          "side": "right",
+          "crop": [
+            0,
+            1830,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/07-basic-calculations-ch-12.png"
+        },
+        {
+          "page": 13,
+          "scan": 8,
+          "side": "left",
+          "crop": [
+            0,
+            0,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/07-basic-calculations-ch-13.png"
+        },
+        {
+          "page": 14,
+          "scan": 8,
+          "side": "right",
+          "crop": [
+            0,
+            0,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/07-basic-calculations-ch-14.png"
+        },
+        {
+          "page": 15,
+          "scan": 9,
+          "side": "left",
+          "crop": [
+            0,
+            0,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/07-basic-calculations-ch-15.png"
+        },
+        {
+          "page": 16,
+          "scan": 9,
+          "side": "right",
+          "crop": [
+            0,
+            0,
+            2143,
+            760
+          ],
+          "image": "assets/pages/07-basic-calculations-ch-16.png"
+        }
+      ]
+    },
+    {
+      "file": "08-history-and-replay.md",
+      "title": "計算履歷及查閱",
+      "regions": [
+        {
+          "page": 16,
+          "scan": 9,
+          "side": "right",
+          "crop": [
+            0,
+            760,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/08-history-and-replay-ch-16.png"
+        },
+        {
+          "page": 17,
+          "scan": 10,
+          "side": "left",
+          "crop": [
+            0,
+            0,
+            2143,
+            1090
+          ],
+          "image": "assets/pages/08-history-and-replay-ch-17.png"
+        }
+      ]
+    },
+    {
+      "file": "09-memory.md",
+      "title": "計算器的記憶器操作",
+      "regions": [
+        {
+          "page": 17,
+          "scan": 10,
+          "side": "left",
+          "crop": [
+            0,
+            1090,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/09-memory-ch-17.png"
+        },
+        {
+          "page": 18,
+          "scan": 10,
+          "side": "right",
+          "crop": [
+            0,
+            0,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/09-memory-ch-18.png"
+        },
+        {
+          "page": 19,
+          "scan": 11,
+          "side": "left",
+          "crop": [
+            0,
+            0,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/09-memory-ch-19.png"
+        },
+        {
+          "page": 20,
+          "scan": 11,
+          "side": "right",
+          "crop": [
+            0,
+            0,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/09-memory-ch-20.png"
+        },
+        {
+          "page": 21,
+          "scan": 12,
+          "side": "left",
+          "crop": [
+            0,
+            0,
+            2143,
+            1045
+          ],
+          "image": "assets/pages/09-memory-ch-21.png"
+        }
+      ]
+    },
+    {
+      "file": "10-constants.md",
+      "title": "如何使用 π、e 及科學常數",
+      "regions": [
+        {
+          "page": 21,
+          "scan": 12,
+          "side": "left",
+          "crop": [
+            0,
+            1045,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/10-constants-ch-21.png"
+        },
+        {
+          "page": 22,
+          "scan": 12,
+          "side": "right",
+          "crop": [
+            0,
+            0,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/10-constants-ch-22.png"
+        },
+        {
+          "page": 23,
+          "scan": 13,
+          "side": "left",
+          "crop": [
+            0,
+            0,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/10-constants-ch-23.png"
+        }
+      ]
+    },
+    {
+      "file": "11-scientific-functions.md",
+      "title": "科學函數計算",
+      "regions": [
+        {
+          "page": 24,
+          "scan": 13,
+          "side": "right",
+          "crop": [
+            0,
+            0,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/11-scientific-functions-ch-24.png"
+        },
+        {
+          "page": 25,
+          "scan": 14,
+          "side": "left",
+          "crop": [
+            0,
+            0,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/11-scientific-functions-ch-25.png"
+        },
+        {
+          "page": 26,
+          "scan": 14,
+          "side": "right",
+          "crop": [
+            0,
+            0,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/11-scientific-functions-ch-26.png"
+        },
+        {
+          "page": 27,
+          "scan": 15,
+          "side": "left",
+          "crop": [
+            0,
+            0,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/11-scientific-functions-ch-27.png"
+        },
+        {
+          "page": 28,
+          "scan": 15,
+          "side": "right",
+          "crop": [
+            0,
+            0,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/11-scientific-functions-ch-28.png"
+        },
+        {
+          "page": 29,
+          "scan": 16,
+          "side": "left",
+          "crop": [
+            0,
+            0,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/11-scientific-functions-ch-29.png"
+        },
+        {
+          "page": 30,
+          "scan": 16,
+          "side": "right",
+          "crop": [
+            0,
+            0,
+            2143,
+            600
+          ],
+          "image": "assets/pages/11-scientific-functions-ch-30.png"
+        }
+      ]
+    },
+    {
+      "file": "12-engineering-notation.md",
+      "title": "如何使用 10³ 工學記數法（ENG）",
+      "regions": [
+        {
+          "page": 30,
+          "scan": 16,
+          "side": "right",
+          "crop": [
+            0,
+            600,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/12-engineering-notation-ch-30.png"
+        }
+      ],
+      "transcription": "Manually transcribed and visually checked against the supplied scans."
+    },
+    {
+      "file": "13-complex-calculations.md",
+      "title": "複數計算（CMPLX）",
+      "regions": [
+        {
+          "page": 31,
+          "scan": 17,
+          "side": "left",
+          "crop": [
+            0,
+            0,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/13-complex-calculations-ch-31.png"
+        },
+        {
+          "page": 32,
+          "scan": 17,
+          "side": "right",
+          "crop": [
+            0,
+            0,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/13-complex-calculations-ch-32.png"
+        },
+        {
+          "page": 33,
+          "scan": 18,
+          "side": "left",
+          "crop": [
+            0,
+            0,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/13-complex-calculations-ch-33.png"
+        },
+        {
+          "page": 34,
+          "scan": 18,
+          "side": "right",
+          "crop": [
+            0,
+            0,
+            2143,
+            1920
+          ],
+          "image": "assets/pages/13-complex-calculations-ch-34.png"
+        }
+      ]
+    },
+    {
+      "file": "14-statistics.md",
+      "title": "統計計算（SD/REG）",
+      "regions": [
+        {
+          "page": 34,
+          "scan": 18,
+          "side": "right",
+          "crop": [
+            0,
+            1920,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/14-statistics-ch-34.png"
+        },
+        {
+          "page": 35,
+          "scan": 19,
+          "side": "left",
+          "crop": [
+            0,
+            0,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/14-statistics-ch-35.png"
+        },
+        {
+          "page": 36,
+          "scan": 19,
+          "side": "right",
+          "crop": [
+            0,
+            0,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/14-statistics-ch-36.png"
+        },
+        {
+          "page": 37,
+          "scan": 20,
+          "side": "left",
+          "crop": [
+            0,
+            0,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/14-statistics-ch-37.png"
+        },
+        {
+          "page": 38,
+          "scan": 20,
+          "side": "right",
+          "crop": [
+            0,
+            0,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/14-statistics-ch-38.png"
+        },
+        {
+          "page": 39,
+          "scan": 21,
+          "side": "left",
+          "crop": [
+            0,
+            0,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/14-statistics-ch-39.png"
+        },
+        {
+          "page": 40,
+          "scan": 21,
+          "side": "right",
+          "crop": [
+            0,
+            0,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/14-statistics-ch-40.png"
+        },
+        {
+          "page": 41,
+          "scan": 22,
+          "side": "left",
+          "crop": [
+            0,
+            0,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/14-statistics-ch-41.png"
+        },
+        {
+          "page": 42,
+          "scan": 22,
+          "side": "right",
+          "crop": [
+            0,
+            0,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/14-statistics-ch-42.png"
+        },
+        {
+          "page": 43,
+          "scan": 23,
+          "side": "left",
+          "crop": [
+            0,
+            0,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/14-statistics-ch-43.png"
+        },
+        {
+          "page": 44,
+          "scan": 23,
+          "side": "right",
+          "crop": [
+            0,
+            0,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/14-statistics-ch-44.png"
+        },
+        {
+          "page": 45,
+          "scan": 24,
+          "side": "left",
+          "crop": [
+            0,
+            0,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/14-statistics-ch-45.png"
+        },
+        {
+          "page": 46,
+          "scan": 24,
+          "side": "right",
+          "crop": [
+            0,
+            0,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/14-statistics-ch-46.png"
+        },
+        {
+          "page": 47,
+          "scan": 25,
+          "side": "left",
+          "crop": [
+            0,
+            0,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/14-statistics-ch-47.png"
+        },
+        {
+          "page": 48,
+          "scan": 25,
+          "side": "right",
+          "crop": [
+            0,
+            0,
+            2143,
+            1290
+          ],
+          "image": "assets/pages/14-statistics-ch-48.png"
+        }
+      ]
+    },
+    {
+      "file": "15-base-n.md",
+      "title": "基數計算（BASE）",
+      "regions": [
+        {
+          "page": 48,
+          "scan": 25,
+          "side": "right",
+          "crop": [
+            0,
+            1290,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/15-base-n-ch-48.png"
+        },
+        {
+          "page": 49,
+          "scan": 26,
+          "side": "left",
+          "crop": [
+            0,
+            0,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/15-base-n-ch-49.png"
+        },
+        {
+          "page": 50,
+          "scan": 26,
+          "side": "right",
+          "crop": [
+            0,
+            0,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/15-base-n-ch-50.png"
+        },
+        {
+          "page": 51,
+          "scan": 27,
+          "side": "left",
+          "crop": [
+            0,
+            0,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/15-base-n-ch-51.png"
+        },
+        {
+          "page": 52,
+          "scan": 27,
+          "side": "right",
+          "crop": [
+            0,
+            0,
+            2143,
+            590
+          ],
+          "image": "assets/pages/15-base-n-ch-52.png"
+        }
+      ]
+    },
+    {
+      "file": "16-built-in-formulas.md",
+      "title": "內置公式",
+      "regions": [
+        {
+          "page": 52,
+          "scan": 27,
+          "side": "right",
+          "crop": [
+            0,
+            590,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/16-built-in-formulas-ch-52.png"
+        },
+        {
+          "page": 53,
+          "scan": 28,
+          "side": "left",
+          "crop": [
+            0,
+            0,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/16-built-in-formulas-ch-53.png"
+        },
+        {
+          "page": 54,
+          "scan": 28,
+          "side": "right",
+          "crop": [
+            0,
+            0,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/16-built-in-formulas-ch-54.png"
+        },
+        {
+          "page": 55,
+          "scan": 29,
+          "side": "left",
+          "crop": [
+            0,
+            0,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/16-built-in-formulas-ch-55.png"
+        },
+        {
+          "page": 56,
+          "scan": 29,
+          "side": "right",
+          "crop": [
+            0,
+            0,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/16-built-in-formulas-ch-56.png"
+        },
+        {
+          "page": 57,
+          "scan": 30,
+          "side": "left",
+          "crop": [
+            0,
+            0,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/16-built-in-formulas-ch-57.png"
+        }
+      ]
+    },
+    {
+      "file": "17-programming.md",
+      "title": "程式模式（PRGM）",
+      "regions": [
+        {
+          "page": 58,
+          "scan": 30,
+          "side": "right",
+          "crop": [
+            0,
+            0,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/17-programming-ch-58.png"
+        },
+        {
+          "page": 59,
+          "scan": 31,
+          "side": "left",
+          "crop": [
+            0,
+            0,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/17-programming-ch-59.png"
+        },
+        {
+          "page": 60,
+          "scan": 31,
+          "side": "right",
+          "crop": [
+            0,
+            0,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/17-programming-ch-60.png"
+        },
+        {
+          "page": 61,
+          "scan": 32,
+          "side": "left",
+          "crop": [
+            0,
+            0,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/17-programming-ch-61.png"
+        },
+        {
+          "page": 62,
+          "scan": 32,
+          "side": "right",
+          "crop": [
+            0,
+            0,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/17-programming-ch-62.png"
+        },
+        {
+          "page": 63,
+          "scan": 33,
+          "side": "left",
+          "crop": [
+            0,
+            0,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/17-programming-ch-63.png"
+        },
+        {
+          "page": 64,
+          "scan": 33,
+          "side": "right",
+          "crop": [
+            0,
+            0,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/17-programming-ch-64.png"
+        },
+        {
+          "page": 65,
+          "scan": 34,
+          "side": "left",
+          "crop": [
+            0,
+            0,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/17-programming-ch-65.png"
+        }
+      ]
+    },
+    {
+      "file": "18-appendix.md",
+      "title": "附錄",
+      "regions": [
+        {
+          "page": 66,
+          "scan": 34,
+          "side": "right",
+          "crop": [
+            0,
+            0,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/18-appendix-ch-66.png"
+        },
+        {
+          "page": 67,
+          "scan": 35,
+          "side": "left",
+          "crop": [
+            0,
+            0,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/18-appendix-ch-67.png"
+        },
+        {
+          "page": 68,
+          "scan": 35,
+          "side": "right",
+          "crop": [
+            0,
+            0,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/18-appendix-ch-68.png"
+        },
+        {
+          "page": 69,
+          "scan": 36,
+          "side": "left",
+          "crop": [
+            0,
+            0,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/18-appendix-ch-69.png"
+        },
+        {
+          "page": 70,
+          "scan": 36,
+          "side": "right",
+          "crop": [
+            0,
+            0,
+            2143,
+            2020
+          ],
+          "image": "assets/pages/18-appendix-ch-70.png"
+        }
+      ]
+    },
+    {
+      "file": "19-power-supply.md",
+      "title": "電源要求",
+      "regions": [
+        {
+          "page": 70,
+          "scan": 36,
+          "side": "right",
+          "crop": [
+            0,
+            2020,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/19-power-supply-ch-70.png"
+        },
+        {
+          "page": 71,
+          "scan": 37,
+          "side": "left",
+          "crop": [
+            0,
+            0,
+            2143,
+            1430
+          ],
+          "image": "assets/pages/19-power-supply-ch-71.png"
+        }
+      ],
+      "transcription": "Manually transcribed and visually checked against the supplied scans."
+    },
+    {
+      "file": "20-specifications.md",
+      "title": "規格",
+      "regions": [
+        {
+          "page": 71,
+          "scan": 37,
+          "side": "left",
+          "crop": [
+            0,
+            1430,
+            2143,
+            3041
+          ],
+          "image": "assets/pages/20-specifications-ch-71.png"
+        }
+      ]
+    }
+  ],
+  "supplements": [
+    {
+      "scan": 1,
+      "image": "assets/front-matter/scan-01.png",
+      "kind": "cover",
+      "side": "both"
+    },
+    {
+      "scan": 37,
+      "image": "assets/front-matter/scan-37.png",
+      "kind": "memo/publication",
+      "side": "right"
+    },
+    {
+      "scan": 38,
+      "image": "assets/front-matter/scan-38.png",
+      "kind": "memo/publication",
+      "side": "both"
+    },
+    {
+      "scan": 39,
+      "image": "assets/front-matter/scan-39.png",
+      "kind": "memo/publication",
+      "side": "both"
+    },
+    {
+      "scan": 40,
+      "image": "assets/front-matter/scan-40.png",
+      "kind": "memo/publication",
+      "side": "both"
+    },
+    {
+      "scan": 3,
+      "page": 3,
+      "image": "assets/front-matter/ch-03.png",
+      "kind": "contents",
+      "side": "left"
+    },
+    {
+      "scan": 3,
+      "page": 4,
+      "image": "assets/front-matter/ch-04.png",
+      "kind": "contents",
+      "side": "right"
+    }
+  ]
+}

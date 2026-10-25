@@ -13,7 +13,7 @@ Open the Local URL printed by Vite. To produce a static build, run `npm run buil
 
 ## First-version behavior
 
-- Clickable calculator keys and replay pad; the key-check panel shows the last key pressed.
+- Clickable calculator keys and replay pad.
 - Basic arithmetic with precedence, parentheses, decimals, sign, powers, square root, inverse, EXP, Ans, DEL, AC, and EXE.
 - Adjacent factors multiply automatically: `(2)(4)`, `2(4)` and `(2)4` all give `8`. Omitted multiplication has priority over explicit × and ÷, following manual Ch-66.
 - The power key (and keyboard `^`) inserts `^(`. Enter `2`, `^`, `3`, `EXE` to display `2^(3` and calculate `8`; the exponent's final `)` is optional before EXE.
@@ -22,8 +22,8 @@ Open the Local URL printed by Vite. To produce a static build, run `npm run buil
 - After `EXE`, press `a b/c` to switch decimal ↔ fraction. The fraction view reduces automatically and defaults to improper form (for example `1.5` → `3┘2`). Press `SHIFT` then `a b/c` (`d/c`) to switch improper ↔ mixed fractions. Fraction calculations retain exact values for conversion and Ans. Fractions exceeding the manual's ten-character limit stay in decimal form.
 - Keyboard: digits, `.`, `+`, `-`, `*`, `/`, `^`, `(`, `)`, Enter or `=` to calculate, Backspace to delete, Escape to clear.
 - SHIFT/ALPHA toggle visual indicators; SHIFT + a b/c implements d/c. Other secondary labels, scientific modes, programming, memory, and advanced functions remain layout previews.
-- Centered, upright portrait calculator with history and supporting details hidden in a hamburger menu by default. Close the menu with its close button, Escape, or a click outside it.
-- Responsive layout, an optional original-reference image, and three recent calculations inside the menu.
+- Centered, upright portrait calculator with recent calculations hidden in a hamburger menu by default. Close the menu with its close button, Escape, or a click outside it.
+- Responsive layout and three recent calculations inside the menu.
 
 `npm test` checks the arithmetic parser and button-state transitions. No backend is required.
 

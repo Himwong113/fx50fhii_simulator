@@ -1,6 +1,7 @@
 import React, { useEffect, useReducer, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { calculatorReducer, initialState } from './calculator';
+import { SCIENTIFIC_CONSTANTS, displayConstants } from './constants';
 import './styles.css';
 
 const scientificRows = [
@@ -25,14 +26,31 @@ function Key({ item, onPress, active }) {
 }
 
 function DisplayText({ value }) {
-  return value.split('┘').map((part, index) => <React.Fragment key={index}>
+  return displayConstants(value).split('┘').map((part, index) => <React.Fragment key={index}>
     {index > 0 && <span className="fraction-separator"><span className="sr-only">┘</span></span>}{part}
   </React.Fragment>);
 }
 
+function ResultText({ value }) {
+  const scientific = value.match(/^(-?\d+(?:\.\d+)?)e([+-]?\d+)$/i);
+  if (!scientific) return <DisplayText value={value} />;
+  return <span className="scientific-result"><span>{scientific[1]}</span><span className="scientific-scale">×10<sup>{Number(scientific[2]).toString().replace('-', '−')}</sup></span></span>;
+}
+
+function ConstantsMenu({ page, onPress }) {
+  return <div className="constants-menu" aria-label={`Scientific constants page ${page + 1} of 10`}>
+    <button type="button" className="constant-page-arrow" aria-label="Previous constants page" onClick={() => onPress({ label: '◀', action: 'replay', direction: 'left' })}>◀</button>
+    <div className="constant-choices">{SCIENTIFIC_CONSTANTS.slice(page * 4, page * 4 + 4).map((constant, index) =>
+      <button type="button" className="constant-choice" key={constant.token} aria-label={`Select ${constant.name}`} title={`${constant.name} · ${constant.value} ${constant.unit}`} onClick={() => onPress({ label: `CONST ${constant.symbol}`, action: 'constant-select', choice: index + 1 })}>
+        <span className="constant-symbol">{constant.symbol}</span><span className="constant-number">{index + 1}</span>
+      </button>
+    )}</div>
+    <button type="button" className="constant-page-arrow" aria-label="Next constants page" onClick={() => onPress({ label: '▶', action: 'replay', direction: 'right' })}>▶</button>
+  </div>;
+}
+
 function App() {
   const [state, dispatch] = useReducer(calculatorReducer, initialState);
-  const [showReference, setShowReference] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
   const menuButtonRef = useRef(null);
@@ -48,7 +66,7 @@ function App() {
       if (event.target.closest('dialog')) return;
       if (event.ctrlKey || event.metaKey || event.altKey || event.target.closest('a, input, textarea, select')) return;
       if (event.key === 'Enter' && event.target.closest('button:not(.key):not(.replay-arrow)')) return;
-      const mapped = { Enter: { label: 'EXE', action: 'execute' }, '=': { label: 'EXE', action: 'execute' }, Backspace: { label: 'DEL', action: 'delete' }, Escape: { label: 'AC', action: 'clear' }, '*': { label: '×', value: '×' }, '/': { label: '÷', value: '÷' }, '-': { label: '−', value: '−' }, '^': { label: '^', value: '^(' } };
+      const mapped = { Enter: { label: 'EXE', action: 'execute' }, '=': { label: 'EXE', action: 'execute' }, Backspace: { label: 'DEL', action: 'delete' }, Escape: { label: 'AC', action: 'clear' }, '*': { label: '×', value: '×' }, '/': { label: '÷', value: '÷' }, '-': { label: '−', value: '−' }, '^': { label: '^', value: '^(' }, ArrowLeft: { label: '◀', action: 'replay', direction: 'left' }, ArrowRight: { label: '▶', action: 'replay', direction: 'right' } };
       const key = mapped[event.key] || (/^[0-9.()+^]$/.test(event.key) ? { label: event.key, value: event.key } : null);
       if (key) { event.preventDefault(); dispatch(key); }
     }
@@ -57,21 +75,13 @@ function App() {
   }, []);
   return <div className="app">
     <header className="site-header">
-      <button ref={menuButtonRef} type="button" className="menu-button" aria-label="Open history and details" aria-haspopup="dialog" aria-controls="details-menu" aria-expanded={menuOpen} onClick={() => { menuRef.current.showModal(); setMenuOpen(true); }}><span /><span /><span /></button>
+      <button ref={menuButtonRef} type="button" className="menu-button" aria-label="Open recent calculations" aria-haspopup="dialog" aria-controls="details-menu" aria-expanded={menuOpen} onClick={() => { menuRef.current.showModal(); setMenuOpen(true); }}><span /><span /><span /></button>
       <span className="header-model">fx-50FH II <span>SIMULATOR</span></span>
     </header>
     <dialog ref={menuRef} id="details-menu" className="menu-dialog" aria-labelledby="menu-title" onClose={() => { setMenuOpen(false); menuButtonRef.current.focus(); }} onClick={event => { if (event.target === event.currentTarget) closeMenu(); }}>
       <section className="intro drawer-panel">
-        <div className="drawer-heading"><div><p className="eyebrow">CALCULATOR MENU</p><h2 id="menu-title">History & details</h2></div><button type="button" className="close-menu" aria-label="Close history and details" onClick={closeMenu}>×</button></div>
-        <div className="history"><p className="eyebrow">RECENT CALCULATIONS</p>{state.history.length ? state.history.map((entry, index) => <div key={index}><span><DisplayText value={entry.expression} /></span><strong>= <DisplayText value={entry.result} /></strong></div>) : <p className="empty-history">Your calculations will appear here.</p>}</div>
-        <div className="model-line"><span>fx-50FH II</span><span className="model-tag">INTERACTIVE PREVIEW</span></div>
-        <div className="interaction-card"><div className="card-heading"><span className="live-dot" /> KEY CHECK</div><div className="last-key"><span>Last pressed</span><output aria-live="polite">{state.lastKey}</output></div><p className="key-notice" aria-live="polite">{state.notice || (state.modifier ? `${state.modifier} indicator active.` : 'Button registered. Try another key.')}</p></div>
-        <div className="scope"><span className="small-check">✓</span><p><strong>Calculations</strong><br />Numbers, +, −, ×, ÷, powers, roots, fractions, parentheses and Ans work. Most other scientific keys are layout previews.</p></div>
-        <div className="scope"><span className="small-check">┘</span><p><strong>Fraction form · {state.fractionStyle === 'mixed' ? 'Mixed' : 'Improper'}</strong><br />Use a b/c to enter 1┘2 or 2┘1┘3. EXE shows the decimal result. Press a b/c to switch fraction ↔ decimal, or SHIFT → a b/c to switch mixed ↔ improper.</p></div>
-        <button className="reference-toggle" onClick={() => setShowReference(!showReference)} aria-expanded={showReference}>{showReference ? 'Hide' : 'View'} original reference <span aria-hidden="true">↗</span></button>
-        {showReference && <div className="reference"><img src="/fx-50fhii-reference.png" alt="Original Casio fx-50FH II calculator used as the button layout reference" /><a href="https://www.jebsenconsumer.com/sites/default/files/styles/large/public/2022-04/fx-50FH2_F.png?itok=vlz_eiYV" target="_blank" rel="noreferrer">Image: Jebsen Consumer ↗</a></div>}
-        <div className="keyboard-hint"><span className="keyboard-icon">⌨</span> Keyboard shortcuts <span className="hint-divider" /> <kbd>enter</kbd> calculate <kbd>esc</kbd> clear</div>
-        <p className="drawer-footer">Unofficial interactive prototype · Basic operations only</p>
+        <div className="drawer-heading"><h2 id="menu-title">RECENT CALCULATIONS</h2><button type="button" className="close-menu" aria-label="Close recent calculations" onClick={closeMenu}>×</button></div>
+        <div className="history">{state.history.length ? state.history.map((entry, index) => <div key={index}><span><DisplayText value={entry.expression} /></span><strong>= <DisplayText value={entry.result} /></strong></div>) : <p className="empty-history">Your calculations will appear here.</p>}</div>
       </section>
     </dialog>
     <main className="workspace">
@@ -81,11 +91,11 @@ function App() {
             <div className="device-brand"><strong>CASIO</strong><span>SUPER-FX PLUS</span></div>
             <div className="device-model"><span>fx-50FH II</span></div>
             <div className="approval"><b>▮▮▮▮</b> H.K.E.A.A. APPROVED</div>
-            <div className="screen-frame"><div className="screen" role="status" aria-label="Calculator display"><div className="screen-indicators"><span className={state.modifier === 'SHIFT' ? 'indicator-on' : ''}>S</span><span className={state.modifier === 'ALPHA' ? 'indicator-on' : ''}>A</span><span className="indicator-on">D</span><span className="screen-mode">COMP</span></div><div className="expression">{state.expression ? <DisplayText value={state.expression} /> : <span className="cursor">▏</span>}</div><output className={`result ${state.result.includes('ERROR') ? 'error-result' : ''}`}><DisplayText value={state.result} /><span className="decimal-dot">{!/[.eE┘]|ERROR/.test(state.result) && state.resultMode !== 'fraction' ? '.' : ''}</span></output></div></div>
+            <div className="screen-frame"><div className="screen" role="status" aria-label="Calculator display"><div className="screen-indicators"><span className={state.modifier === 'SHIFT' ? 'indicator-on' : ''}>S</span><span className={state.modifier === 'ALPHA' ? 'indicator-on' : ''}>A</span><span className="indicator-on">D</span><span className="screen-mode">{state.constantPage !== null ? `CONST ${state.constantPage + 1}/10` : 'COMP'}</span></div>{state.constantPage !== null ? <ConstantsMenu page={state.constantPage} onPress={dispatch} /> : <><div className="expression">{state.expression ? <DisplayText value={state.expression} /> : <span className="cursor">▏</span>}</div><output aria-label={state.result} className={`result ${state.result.includes('ERROR') ? 'error-result' : ''}`}><ResultText value={state.result} /><span className="decimal-dot">{!/[.eE┘]|ERROR/.test(state.result) && state.resultMode !== 'fraction' ? '.' : ''}</span></output></>}</div></div>
             <div className="top-controls">
               <Key item={{ label: 'SHIFT', action: 'modifier', kind: 'shift top-key' }} active={state.modifier === 'SHIFT'} onPress={dispatch} />
               <Key item={{ label: 'ALPHA', action: 'modifier', kind: 'alpha top-key' }} active={state.modifier === 'ALPHA'} onPress={dispatch} />
-              <div className="replay"><span className="replay-label">REPLAY</span>{[['▲','up'],['◀','left'],['▶','right'],['▼','down']].map(([symbol, direction]) => <button key={direction} className={`replay-arrow ${direction}`} aria-label={`Replay ${direction}`} onClick={() => dispatch({ label: `REPLAY ${direction}` })}>{symbol}</button>)}</div>
+              <div className="replay"><span className="replay-label">REPLAY</span>{[['▲','up'],['◀','left'],['▶','right'],['▼','down']].map(([symbol, direction]) => <button key={direction} className={`replay-arrow ${direction}`} aria-label={`Replay ${direction}`} onClick={() => dispatch({ label: `REPLAY ${direction}`, action: 'replay', direction })}>{symbol}</button>)}</div>
               <Key item={{ label: 'MODE', shift: 'SETUP', kind: 'top-key' }} onPress={dispatch} />
               <Key item={{ label: 'ON', action: 'on', kind: 'top-key' }} onPress={dispatch} />
             </div>

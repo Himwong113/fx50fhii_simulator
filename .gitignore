@@ -1,15 +1,25 @@
+# Dependencies and build output
 node_modules/
 dist/
+dist-ssr/
+.vite/
+.cache/
+
+# Local codebase index
 .codebase-memory/
 
 # Local environment and configuration
 .env
 .env.*
 !.env.example
+!.env.sample
+!.env.*.example
+!.env.*.sample
 *.local
 
 # Logs and test output
 *.log
+*.log.*
 coverage/
 
 # Editor and OS files
@@ -18,3 +28,5 @@ coverage/
 Thumbs.db
 *.swp
 *.swo
+*~
+*.png
