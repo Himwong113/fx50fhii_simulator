@@ -29,6 +29,10 @@
 
 [MEMO 與出版資訊](21-memo-and-publication.md)
 
+## 來源與致謝
+
+感謝 **John_Wong_22** 於 2022 年 4 月 11 日在 Bilibili 分享 [Casio fx-50FH II User Guide](https://www.bilibili.com/opus/647767702107062279) 原書掃描。本目錄的 Markdown 與影像整理以該帖提供的掃描為來源，並供模擬器功能實作參考。原書內容及圖像權利歸 CASIO COMPUTER CO., LTD. 所有。
+
 ## 轉換說明
 
 - 原始檔為本機提供的 `Casio fx-50FH II User Guide.pdf` 與同名資料夾內的 40 張雙頁 PNG 掃描；PDF 沒有可擷取的文字層。

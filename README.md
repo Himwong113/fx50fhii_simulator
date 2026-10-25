@@ -36,3 +36,11 @@ Calculator reference image: [Jebsen Consumer](https://www.jebsenconsumer.com/sit
 
 Unofficial prototype; not affiliated with Casio. The first version is not a full hardware emulation.
 # fx50fhii_simulator
+
+## Feature development and dependency injection
+
+The app is composed with `createCalculator({ math, features })` and injected into React as `<App runtime={runtime} />`. Scientific behavior lives in independent `src/features/<id>/` folders; the browser discovers their definitions, optional LCD screens, text renderers and styles automatically.
+
+For parallel agent work, assign each agent a separate feature folder. New features can bind an existing calculator key, add expression parsing, own namespaced state, and provide UI without changing the shared reducer, app, keypad or an import registry. Duplicate IDs, bindings and action names fail during composition. Tests can inject a different math service or feature subset.
+
+See [the feature API and complete example](docs/FEATURES.md) and [agent working rules](AGENTS.md). Run `npm test` for all regression and architecture tests, or `node --test src/features/<id>/*.test.js` for a feature's own tests.

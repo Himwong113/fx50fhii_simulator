@@ -1,0 +1,46 @@
+.constants-menu {
+  display: flex;
+  align-items: center;
+  height: 70px;
+  gap: 1px;
+}
+.constant-choices {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  width: 100%;
+  height: 100%;
+}
+.constant-choice, .constant-page-arrow {
+  border: 0;
+  border-radius: 3px;
+  background: transparent;
+  color: inherit;
+  padding: 0;
+  font-family: inherit;
+}
+.constant-choice:hover, .constant-page-arrow:hover {
+  background: #536b591c;
+}
+.constant-choice {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+}
+.constant-symbol {
+  font-size: 18px;
+  line-height: 1.2;
+  letter-spacing: -1.5px;
+}
+.constant-number {
+  font-size: 26px;
+  line-height: 1;
+}
+.constant-page-arrow {
+  flex-shrink: 0;
+  width: 12px;
+  height: 40px;
+  font-size: 10px;
+}

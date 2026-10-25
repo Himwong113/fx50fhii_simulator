@@ -87,7 +87,7 @@ function enterFractionExpression(expression, state = initialState) {
 }
 
 function fractionResult(expression) {
-  return calculatorReducer(enterFractionExpression(expression, { ...initialState, fractionStyle: 'mixed' }), fractionKey);
+  return calculatorReducer(enterFractionExpression(expression, { ...initialState, features: { ...initialState.features, fractions: { style: 'mixed' } } }), fractionKey);
 }
 
 test('manual Ch-13 examples convert to reduced mixed/improper fractions exactly', () => {
@@ -99,7 +99,7 @@ test('manual Ch-13 examples convert to reduced mixed/improper fractions exactly'
   assert.equal(state.result, '1┘1┘6');
   state = calculatorReducer(calculatorReducer(state, shiftKey), fractionKey);
   assert.equal(state.result, '7┘6');
-  assert.equal(state.fractionStyle, 'improper');
+  assert.equal(state.features.fractions.style, 'improper');
   assert.equal(state.modifier, '');
   state = calculatorReducer(calculatorReducer(state, shiftKey), fractionKey);
   assert.equal(state.result, '1┘1┘6');
@@ -220,22 +220,22 @@ test('SHIFT 7 opens ten pages of four constants, with wrapping and numeric selec
   assert.equal(SCIENTIFIC_CONSTANTS.length, 40);
   assert.deepEqual(SCIENTIFIC_CONSTANTS.slice(0, 4).map(c => c.symbol), ['mp', 'mn', 'me', 'mμ']);
   let menu = openConstants(initialState);
-  assert.equal(menu.constantPage, 0);
+  assert.equal(menu.features.constants.page, 0);
   assert.equal(menu.modifier, '');
-  assert.equal(calculatorReducer(menu, pageLeft).constantPage, 9);
+  assert.equal(calculatorReducer(menu, pageLeft).features.constants.page, 9);
   for (let page = 0; page < 10; page++) {
-    assert.equal(menu.constantPage, page);
+    assert.equal(menu.features.constants.page, page);
     for (let choice = 1; choice <= 4; choice++) {
       const entry = SCIENTIFIC_CONSTANTS[page * 4 + choice - 1];
       let state = calculatorReducer(menu, { label: String(choice), value: String(choice) });
-      assert.equal(state.constantPage, null);
+      assert.equal(state.features.constants.page, null);
       assert.equal(displayConstants(state.expression), entry.symbol);
       state = calculatorReducer(state, executeKey);
       assert.equal(state.answer, Number(Number(entry.value).toPrecision(12)), entry.name);
     }
     menu = calculatorReducer(menu, pageRight);
   }
-  assert.equal(menu.constantPage, 0);
+  assert.equal(menu.features.constants.page, 0);
 });
 
 test('manual constants examples evaluate with symbols and omitted multiplication', () => {
@@ -256,9 +256,9 @@ test('constants menu preserves input, cancels, starts a new expression and delet
   let state = calculatorReducer(initialState, { label: '2', value: '2' });
   state = calculatorReducer(state, { label: '+', value: '+' });
   let menu = openConstants(state);
-  assert.equal(calculatorReducer(menu, { label: '9', value: '9' }).constantPage, 0);
+  assert.equal(calculatorReducer(menu, { label: '9', value: '9' }).features.constants.page, 0);
   let cancelled = calculatorReducer(menu, { label: 'AC', action: 'clear' });
-  assert.equal(cancelled.constantPage, null);
+  assert.equal(cancelled.features.constants.page, null);
   assert.equal(cancelled.expression, '2+');
   state = calculatorReducer(menu, { label: 'mp', action: 'constant-select', choice: 1 });
   assert.equal(displayConstants(state.expression), '2+mp');
