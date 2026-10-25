@@ -5,7 +5,7 @@ import './styles.css';
 
 const scientificRows = [
   [ { label: 'Prog', shift: 'EXIT', kind: 'orange' }, { label: 'FMLA', kind: 'orange' }, { label: '', spacer: true }, { label: '', spacer: true }, { label: 'x⁻¹', exponent: '−1', shift: 'x!', base: 'LOGIC', kind: 'power-key', value: '⁻¹' }, { label: 'x³', exponent: '3', shift: '∛', kind: 'power-key', value: '³' } ],
-  [ { label: 'a b/c', shift: 'd/c' }, { label: '√', value: '^(0.5)' }, { label: 'x²', alpha: 'DEC', value: '²' }, { label: '^', shift: 'ˣ√', alpha: 'HEX', value: '^' }, { label: 'log', shift: '10ˣ', alpha: 'BIN' }, { label: 'ln', shift: 'eˣ', alpha: 'OCT' } ],
+  [ { label: 'a b/c', shift: 'd/c', action: 'fraction' }, { label: '√', value: '√(' }, { label: 'x²', alpha: 'DEC', value: '²' }, { label: '^', shift: 'ˣ√', alpha: 'HEX', value: '^(' }, { label: 'log', shift: '10ˣ', alpha: 'BIN' }, { label: 'ln', shift: 'eˣ', alpha: 'OCT' } ],
   [ { label: '(−)', shift: '∠', alpha: 'A', value: '−' }, { label: '°′″', shift: '←', alpha: 'B' }, { label: 'hyp', alpha: 'C' }, { label: 'sin', shift: 'sin⁻¹', alpha: 'D' }, { label: 'cos', shift: 'cos⁻¹', alpha: 'E' }, { label: 'tan', shift: 'tan⁻¹', alpha: 'F' } ],
   [ { label: 'RCL', shift: 'STO' }, { label: 'ENG', shift: '←' }, { label: '(', alpha: 'X', value: '(' }, { label: ')', alpha: 'Y', value: ')' }, { label: ',', alpha: 'M' }, { label: 'M+', shift: 'M−' } ],
 ];
@@ -22,6 +22,12 @@ function Key({ item, onPress, active }) {
     <span className="key-legend" aria-hidden="true"><span>{item.shift === '∛' ? <span className="cube-root-legend"><sup>3</sup>√</span> : item.shift}</span><em>{item.base || item.alpha}</em></span>
     <button type="button" className={`key ${item.kind || ''} ${active ? 'latched' : ''}`} aria-label={item.label} title={item.value !== undefined || item.action ? item.label : `${item.label} · layout preview`} onClick={() => onPress(item)}>{item.exponent ? <span className="power-key-face"><i>x</i><sup>{item.exponent}</sup></span> : item.label}</button>
   </div>;
+}
+
+function DisplayText({ value }) {
+  return value.split('┘').map((part, index) => <React.Fragment key={index}>
+    {index > 0 && <span className="fraction-separator"><span className="sr-only">┘</span></span>}{part}
+  </React.Fragment>);
 }
 
 function App() {
@@ -42,7 +48,7 @@ function App() {
       if (event.target.closest('dialog')) return;
       if (event.ctrlKey || event.metaKey || event.altKey || event.target.closest('a, input, textarea, select')) return;
       if (event.key === 'Enter' && event.target.closest('button:not(.key):not(.replay-arrow)')) return;
-      const mapped = { Enter: { label: 'EXE', action: 'execute' }, '=': { label: 'EXE', action: 'execute' }, Backspace: { label: 'DEL', action: 'delete' }, Escape: { label: 'AC', action: 'clear' }, '*': { label: '×', value: '×' }, '/': { label: '÷', value: '÷' }, '-': { label: '−', value: '−' } };
+      const mapped = { Enter: { label: 'EXE', action: 'execute' }, '=': { label: 'EXE', action: 'execute' }, Backspace: { label: 'DEL', action: 'delete' }, Escape: { label: 'AC', action: 'clear' }, '*': { label: '×', value: '×' }, '/': { label: '÷', value: '÷' }, '-': { label: '−', value: '−' }, '^': { label: '^', value: '^(' } };
       const key = mapped[event.key] || (/^[0-9.()+^]$/.test(event.key) ? { label: event.key, value: event.key } : null);
       if (key) { event.preventDefault(); dispatch(key); }
     }
@@ -57,10 +63,11 @@ function App() {
     <dialog ref={menuRef} id="details-menu" className="menu-dialog" aria-labelledby="menu-title" onClose={() => { setMenuOpen(false); menuButtonRef.current.focus(); }} onClick={event => { if (event.target === event.currentTarget) closeMenu(); }}>
       <section className="intro drawer-panel">
         <div className="drawer-heading"><div><p className="eyebrow">CALCULATOR MENU</p><h2 id="menu-title">History & details</h2></div><button type="button" className="close-menu" aria-label="Close history and details" onClick={closeMenu}>×</button></div>
-        <div className="history"><p className="eyebrow">RECENT CALCULATIONS</p>{state.history.length ? state.history.map((entry, index) => <div key={index}><span>{entry.expression}</span><strong>= {entry.result}</strong></div>) : <p className="empty-history">Your calculations will appear here.</p>}</div>
+        <div className="history"><p className="eyebrow">RECENT CALCULATIONS</p>{state.history.length ? state.history.map((entry, index) => <div key={index}><span><DisplayText value={entry.expression} /></span><strong>= <DisplayText value={entry.result} /></strong></div>) : <p className="empty-history">Your calculations will appear here.</p>}</div>
         <div className="model-line"><span>fx-50FH II</span><span className="model-tag">INTERACTIVE PREVIEW</span></div>
         <div className="interaction-card"><div className="card-heading"><span className="live-dot" /> KEY CHECK</div><div className="last-key"><span>Last pressed</span><output aria-live="polite">{state.lastKey}</output></div><p className="key-notice" aria-live="polite">{state.notice || (state.modifier ? `${state.modifier} indicator active.` : 'Button registered. Try another key.')}</p></div>
-        <div className="scope"><span className="small-check">✓</span><p><strong>Start with the basics</strong><br />Numbers, +, −, ×, ÷, powers, parentheses and Ans work. Other scientific keys are clickable layout previews; their secondary labels are visual only.</p></div>
+        <div className="scope"><span className="small-check">✓</span><p><strong>Calculations</strong><br />Numbers, +, −, ×, ÷, powers, roots, fractions, parentheses and Ans work. Most other scientific keys are layout previews.</p></div>
+        <div className="scope"><span className="small-check">┘</span><p><strong>Fraction form · {state.fractionStyle === 'mixed' ? 'Mixed' : 'Improper'}</strong><br />Use a b/c to enter 1┘2 or 2┘1┘3. EXE shows the decimal result. Press a b/c to switch fraction ↔ decimal, or SHIFT → a b/c to switch mixed ↔ improper.</p></div>
         <button className="reference-toggle" onClick={() => setShowReference(!showReference)} aria-expanded={showReference}>{showReference ? 'Hide' : 'View'} original reference <span aria-hidden="true">↗</span></button>
         {showReference && <div className="reference"><img src="/fx-50fhii-reference.png" alt="Original Casio fx-50FH II calculator used as the button layout reference" /><a href="https://www.jebsenconsumer.com/sites/default/files/styles/large/public/2022-04/fx-50FH2_F.png?itok=vlz_eiYV" target="_blank" rel="noreferrer">Image: Jebsen Consumer ↗</a></div>}
         <div className="keyboard-hint"><span className="keyboard-icon">⌨</span> Keyboard shortcuts <span className="hint-divider" /> <kbd>enter</kbd> calculate <kbd>esc</kbd> clear</div>
@@ -74,7 +81,7 @@ function App() {
             <div className="device-brand"><strong>CASIO</strong><span>SUPER-FX PLUS</span></div>
             <div className="device-model"><span>fx-50FH II</span></div>
             <div className="approval"><b>▮▮▮▮</b> H.K.E.A.A. APPROVED</div>
-            <div className="screen-frame"><div className="screen" role="status" aria-label="Calculator display"><div className="screen-indicators"><span className={state.modifier === 'SHIFT' ? 'indicator-on' : ''}>S</span><span className={state.modifier === 'ALPHA' ? 'indicator-on' : ''}>A</span><span className="indicator-on">D</span><span className="screen-mode">COMP</span></div><div className="expression">{state.expression || <span className="cursor">▏</span>}</div><output className={`result ${state.result.includes('ERROR') ? 'error-result' : ''}`}>{state.result}<span className="decimal-dot">{!/[.eE]|ERROR/.test(state.result) ? '.' : ''}</span></output></div></div>
+            <div className="screen-frame"><div className="screen" role="status" aria-label="Calculator display"><div className="screen-indicators"><span className={state.modifier === 'SHIFT' ? 'indicator-on' : ''}>S</span><span className={state.modifier === 'ALPHA' ? 'indicator-on' : ''}>A</span><span className="indicator-on">D</span><span className="screen-mode">COMP</span></div><div className="expression">{state.expression ? <DisplayText value={state.expression} /> : <span className="cursor">▏</span>}</div><output className={`result ${state.result.includes('ERROR') ? 'error-result' : ''}`}><DisplayText value={state.result} /><span className="decimal-dot">{!/[.eE┘]|ERROR/.test(state.result) && state.resultMode !== 'fraction' ? '.' : ''}</span></output></div></div>
             <div className="top-controls">
               <Key item={{ label: 'SHIFT', action: 'modifier', kind: 'shift top-key' }} active={state.modifier === 'SHIFT'} onPress={dispatch} />
               <Key item={{ label: 'ALPHA', action: 'modifier', kind: 'alpha top-key' }} active={state.modifier === 'ALPHA'} onPress={dispatch} />
