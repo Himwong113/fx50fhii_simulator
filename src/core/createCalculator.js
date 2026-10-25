@@ -26,6 +26,9 @@ export function createCalculator({ math, features = [] } = {}) {
     }
   }
   const evaluate = createEvaluator({ math, features: modules });
+  function evaluateState(state, expression = state.expression) {
+    return evaluate(expression, state.answer, state.answerFraction, state.answerMode, state.features);
+  }
   function createInitialState() {
     return {
       expression: '', result: '0', answer: 0, answerFraction: null, answerMode: 'decimal',
@@ -48,7 +51,7 @@ export function createCalculator({ math, features = [] } = {}) {
   }
   function context(feature) {
     return {
-      math, evaluate, append, setResult,
+      math, evaluate, evaluateState, append, setResult,
       getFeatureState: state => state.features[feature.id],
       setFeatureState: (state, patch) => ({ ...state, features: { ...state.features, [feature.id]: { ...state.features[feature.id], ...patch } } }),
       activate: state => ({ ...state, activeFeature: feature.id, modifier: '' }),
@@ -89,7 +92,7 @@ export function createCalculator({ math, features = [] } = {}) {
     }
     if (key.action === 'execute') {
       try {
-        const evaluated = evaluate(state.expression, state.answer, state.answerFraction, state.answerMode);
+        const evaluated = evaluateState(state);
         const result = String(evaluated.value);
         return {
           ...next, answer: evaluated.value, answerFraction: evaluated.fraction, answerMode: 'decimal',
@@ -102,7 +105,7 @@ export function createCalculator({ math, features = [] } = {}) {
     return { ...next, modifier: '', notice: `${key.label} selected · layout preview only.` };
   }
   return Object.freeze({
-    reducer, evaluate, createInitialState, resolveKey,
+    reducer, evaluate, evaluateState, createInitialState, resolveKey,
     calculate: (expression, answer = 0) => evaluate(expression, answer).value,
     formatExpression: expression => modules.reduce((text, f) => f.expression?.format?.(text) ?? text, expression),
     getStatus: state => modules.find(f => f.id === state.activeFeature)?.status?.(state) ?? 'COMP',

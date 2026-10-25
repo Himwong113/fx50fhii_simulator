@@ -240,3 +240,8 @@
   font-size: 10px;
   line-height: 0;
 }
+
+/* Red ALPHA variables are distinct from green BASE labels. */
+.key-legend .key-alpha {
+  color: #bd5c49;
+}

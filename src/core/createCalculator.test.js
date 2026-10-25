@@ -132,3 +132,26 @@ test('postfix features choose Ans continuation without a core token change', () 
   state = calculator.reducer(state, { label: 'hyp' });
   assert.equal(state.expression, 'Anscustom');
 });
+
+test('state-aware evaluation injects namespaces without global mutable parser state', () => {
+  const calculator = createCalculator({ math, features: [{
+    id: 'reader', initialState: { value: '2' },
+    actions: { 'reader.set': (state, key, ctx) => ctx.setFeatureState(state, { value: key.value }) },
+    expression: {
+      startsPrimary: text => text.startsWith('@'),
+      parsePrimary(parser) {
+        if (!parser.remaining.startsWith('@')) return;
+        parser.consume(1);
+        return parser.math.fromDecimal(parser.getFeatureState('reader')?.value ?? '0');
+      },
+    },
+  }] });
+  const initial = calculator.createInitialState();
+  const updated = calculator.reducer(initial, { label: 'set', action: 'reader.set', value: '3' });
+  assert.equal(calculator.evaluateState(initial, '@').value, 2);
+  assert.equal(calculator.evaluateState(updated, '@').value, 3);
+  const result = calculator.reducer({ ...updated, expression: '2@' }, { label: 'EXE', action: 'execute' });
+  assert.equal(result.result, '6');
+  assert.equal(calculator.evaluate('@', 0, null, 'decimal', { reader: { value: '9' } }).value, 9);
+  assert.equal(calculator.calculate('@'), 0);
+});

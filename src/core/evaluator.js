@@ -2,7 +2,7 @@ const NUMBER = /^(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?/;
 
 /** Build a parser using injected scalar operations and feature-owned primary readers. */
 export function createEvaluator({ math, features }) {
-  return function evaluate(expression, answer = 0, answerFraction = null, answerMode = 'decimal') {
+  return function evaluate(expression, answer = 0, answerFraction = null, answerMode = 'decimal', featureStates = {}) {
     const normalized = features.reduce((text, feature) => feature.expression?.normalize?.(text) ?? text, expression);
     const source = normalized.replaceAll('×', '*').replaceAll('÷', '/').replaceAll('−', '-').replace(/\s/g, '');
     const metadata = { containsFraction: false, containsDecimal: false };
@@ -16,6 +16,7 @@ export function createEvaluator({ math, features }) {
     }
     const parser = {
       math, metadata, readNumber,
+      getFeatureState: id => featureStates[id],
       get source() { return source; },
       get position() { return position; },
       get remaining() { return source.slice(position); },

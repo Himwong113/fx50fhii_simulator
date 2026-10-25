@@ -68,7 +68,7 @@ Definitions are plain JavaScript modules with a default export and no React or b
 - `status(state)`: optional active-screen status label.
 - `priority`: parser/formatter ordering, highest first; ties use feature ID. Avoid overlapping syntax. Key/action collisions remain errors regardless of priority.
 
-The handler context supplies injected `math`, `evaluate`, `append(state, text, { continueResult? })`, `setResult(state, result, mode)`, `getFeatureState(state)`, `setFeatureState(state, patch)`, `activate(state)` and `deactivate(state)`. `append` handles expression limits and starting/chaining a result (ordinary arithmetic operators chain by default); `setResult` also updates the most recent history entry. `activate`/`deactivate` control the generic `state.activeFeature` screen slot. A screen feature should own and clear its own menu state as the constants feature does.
+The handler context supplies injected `math`, `evaluate`, `evaluateState(state, expression?)`, `append(state, text, { continueResult? })`, `setResult(state, result, mode)`, `getFeatureState(state)`, `setFeatureState(state, patch)`, `activate(state)` and `deactivate(state)`. `append` handles expression limits and starting/chaining a result (ordinary arithmetic operators chain by default); `setResult` also updates the most recent history entry. `activate`/`deactivate` control the generic `state.activeFeature` screen slot. A screen feature should own and clear its own menu state as the constants feature does.
 
 Core state contains the expression, result, answer, modes, modifier, history and `activeFeature`. Feature settings live in namespaces: for example `state.features.fractions.style` and `state.features.constants.page`.
 
@@ -82,7 +82,7 @@ Core state contains the expression, result, answer, modes, modifier, history and
 - `deleteLength(expression)`: atomic trailing-token length, or zero.
 - `format(text)`: convert stored tokens to display text, without changing the stored expression.
 
-The parser supplies `source`, `position`, `remaining`, `consume(count)`, `readNumber()`, `readExpression()`, `closeOptionalGroup()`, `math` and calculation `metadata`. Use its methods rather than evaluating JavaScript or modifying a separate cursor. `closeOptionalGroup` accepts a closing `)` or the end of an otherwise valid expression. New top-level operators/precedence rules still require a shared grammar change; function-style features do not.
+The parser supplies `source`, `position`, `remaining`, `consume(count)`, `readNumber()`, `readExpression()`, `closeOptionalGroup()`, `getFeatureState(id)`, `math` and calculation `metadata`. `getFeatureState` exposes the current calculator instance’s feature namespace for stateful primaries such as variables; treat it as read-only. Use `ctx.evaluateState(state)` to evaluate with those same values inside an action, and `calculator.evaluateState(state, expression)` for programmatic evaluation with a specific state. Use its methods rather than evaluating JavaScript or modifying a separate cursor. `closeOptionalGroup` accepts a closing `)` or the end of an otherwise valid expression. New top-level operators/precedence rules still require a shared grammar change; function-style features do not.
 
 ### Optional React modules
 
