@@ -33,3 +33,21 @@ test('button sequence computes, chains with Ans, deletes and clears', () => {
   assert.equal(state.result, '0');
   assert.equal(state.answer, 30);
 });
+
+test('power keys preserve calculator notation in the display, history and deletion', () => {
+  for (const [symbol, expected] of [['⁻¹', 1 / 6], ['²', 36], ['³', 216]]) {
+    let state = calculatorReducer(initialState, { label: '6', value: '6' });
+    state = calculatorReducer(state, { label: `x${symbol}`, value: symbol });
+    assert.equal(state.expression, `6${symbol}`);
+    const deleted = calculatorReducer(state, { label: 'DEL', action: 'delete' });
+    assert.equal(deleted.expression, '6');
+    state = calculatorReducer(state, { label: 'EXE', action: 'execute' });
+    assert.equal(state.answer, Number(expected.toPrecision(12)));
+    assert.equal(state.history[0].expression, `6${symbol}`);
+  }
+  let state = calculatorReducer(initialState, { label: '6', value: '6' });
+  state = calculatorReducer(state, { label: 'EXE', action: 'execute' });
+  state = calculatorReducer(state, { label: 'x⁻¹', value: '⁻¹' });
+  assert.equal(state.expression, 'Ans⁻¹');
+  assert.equal(calculate(state.expression, state.answer), 0.166666666667);
+});

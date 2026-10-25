@@ -176,3 +176,47 @@
   .workspace { min-height: calc(100svh - 56px); padding: 22px 0 28px; }
   .drawer-panel.intro { padding: 24px 20px; }
 }
+
+/* Manual Ch-5 / Ch-26: reciprocal and cube keys, with separate mode legends. */
+.power-key-wrap .key-legend {
+  justify-content: center;
+  gap: 3px;
+  padding: 0;
+}
+.power-key-wrap .key-legend em {
+  font-size: 6px;
+  letter-spacing: -.2px;
+}
+.power-key-face {
+  display: inline-flex;
+  align-items: baseline;
+  font-family: 'Times New Roman', serif;
+  font-size: 16px;
+  line-height: 1;
+}
+.power-key-face i {
+  font-weight: 400;
+}
+.power-key-face sup {
+  position: relative;
+  top: -.55em;
+  margin-left: 1px;
+  font-family: Arial, sans-serif;
+  font-size: 9px;
+  line-height: 0;
+}
+.cube-root-legend {
+  display: inline-flex;
+  align-items: baseline;
+  font-family: 'Times New Roman', serif;
+  font-size: 11px;
+  line-height: 1;
+}
+.cube-root-legend sup {
+  position: relative;
+  top: -.55em;
+  margin-right: -1px;
+  font-family: Arial, sans-serif;
+  font-size: 6px;
+  line-height: 0;
+}

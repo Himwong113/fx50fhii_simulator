@@ -4,8 +4,8 @@ import { calculatorReducer, initialState } from './calculator';
 import './styles.css';
 
 const scientificRows = [
-  [ { label: 'Prog', shift: 'EXIT', kind: 'orange' }, { label: 'FMLA', kind: 'orange' }, { label: '', spacer: true }, { label: '', spacer: true }, { label: 'x⁻¹', shift: 'x!', value: '^(-1)' }, { label: 'x³', shift: '∛', value: '^3' } ],
-  [ { label: 'a b/c', shift: 'd/c' }, { label: '√', value: '^(0.5)' }, { label: 'x²', alpha: 'DEC', value: '^2' }, { label: '^', shift: 'ˣ√', alpha: 'HEX', value: '^' }, { label: 'log', shift: '10ˣ', alpha: 'BIN' }, { label: 'ln', shift: 'eˣ', alpha: 'OCT' } ],
+  [ { label: 'Prog', shift: 'EXIT', kind: 'orange' }, { label: 'FMLA', kind: 'orange' }, { label: '', spacer: true }, { label: '', spacer: true }, { label: 'x⁻¹', exponent: '−1', shift: 'x!', base: 'LOGIC', kind: 'power-key', value: '⁻¹' }, { label: 'x³', exponent: '3', shift: '∛', kind: 'power-key', value: '³' } ],
+  [ { label: 'a b/c', shift: 'd/c' }, { label: '√', value: '^(0.5)' }, { label: 'x²', alpha: 'DEC', value: '²' }, { label: '^', shift: 'ˣ√', alpha: 'HEX', value: '^' }, { label: 'log', shift: '10ˣ', alpha: 'BIN' }, { label: 'ln', shift: 'eˣ', alpha: 'OCT' } ],
   [ { label: '(−)', shift: '∠', alpha: 'A', value: '−' }, { label: '°′″', shift: '←', alpha: 'B' }, { label: 'hyp', alpha: 'C' }, { label: 'sin', shift: 'sin⁻¹', alpha: 'D' }, { label: 'cos', shift: 'cos⁻¹', alpha: 'E' }, { label: 'tan', shift: 'tan⁻¹', alpha: 'F' } ],
   [ { label: 'RCL', shift: 'STO' }, { label: 'ENG', shift: '←' }, { label: '(', alpha: 'X', value: '(' }, { label: ')', alpha: 'Y', value: ')' }, { label: ',', alpha: 'M' }, { label: 'M+', shift: 'M−' } ],
 ];
@@ -18,9 +18,9 @@ const numberRows = [
 
 function Key({ item, onPress, active }) {
   if (item.spacer) return <span className="key-spacer" aria-hidden="true" />;
-  return <div className="key-wrap">
-    <span className="key-legend" aria-hidden="true"><span>{item.shift}</span><em>{item.alpha}</em></span>
-    <button type="button" className={`key ${item.kind || ''} ${active ? 'latched' : ''}`} aria-label={item.label} title={item.value !== undefined || item.action ? item.label : `${item.label} · layout preview`} onClick={() => onPress(item)}>{item.label}</button>
+  return <div className={`key-wrap ${item.exponent ? 'power-key-wrap' : ''}`}>
+    <span className="key-legend" aria-hidden="true"><span>{item.shift === '∛' ? <span className="cube-root-legend"><sup>3</sup>√</span> : item.shift}</span><em>{item.base || item.alpha}</em></span>
+    <button type="button" className={`key ${item.kind || ''} ${active ? 'latched' : ''}`} aria-label={item.label} title={item.value !== undefined || item.action ? item.label : `${item.label} · layout preview`} onClick={() => onPress(item)}>{item.exponent ? <span className="power-key-face"><i>x</i><sup>{item.exponent}</sup></span> : item.label}</button>
   </div>;
 }
 

@@ -1,6 +1,6 @@
 // A small arithmetic parser: no eval or generated JavaScript.
 export function calculate(expression, answer = 0) {
-  const source = expression.replaceAll('×', '*').replaceAll('÷', '/').replaceAll('−', '-').replaceAll('Ans', `(${answer})`).replaceAll('π', String(Math.PI)).replace(/\s/g, '');
+  const source = expression.replaceAll('⁻¹', '^(-1)').replaceAll('²', '^2').replaceAll('³', '^3').replaceAll('×', '*').replaceAll('÷', '/').replaceAll('−', '-').replaceAll('Ans', `(${answer})`).replaceAll('π', String(Math.PI)).replace(/\s/g, '');
   let position = 0;
   function primary() {
     if (source[position] === '+') { position++; return primary(); }
@@ -53,7 +53,10 @@ export function calculatorReducer(state, key) {
   const next = { ...state, lastKey: key.label, notice: '' };
   if (key.action === 'clear' || key.action === 'on') return { ...initialState, answer: state.answer, history: state.history, lastKey: key.label, notice: key.action === 'on' ? 'Calculator is on.' : 'Display cleared.' };
   if (key.action === 'modifier') return { ...next, modifier: state.modifier === key.label ? '' : key.label };
-  if (key.action === 'delete') return { ...next, expression: state.expression.endsWith('Ans') ? state.expression.slice(0, -3) : state.expression.slice(0, -1), evaluated: false, result: '0' };
+  if (key.action === 'delete') {
+    const suffixLength = state.expression.endsWith('Ans') ? 3 : state.expression.endsWith('⁻¹') ? 2 : 1;
+    return { ...next, expression: state.expression.slice(0, -suffixLength), evaluated: false, result: '0' };
+  }
   if (key.action === 'execute') {
     try {
       const answer = calculate(state.expression, state.answer);
@@ -62,7 +65,7 @@ export function calculatorReducer(state, key) {
   }
   if (key.value !== undefined) {
     let expression = state.expression;
-    if (state.evaluated) expression = /^[×÷+−^]/.test(key.value) ? 'Ans' : '';
+    if (state.evaluated) expression = /^[×÷+−^⁻²³]/.test(key.value) ? 'Ans' : '';
     if (expression.length >= 80) return { ...next, notice: 'Expression limit reached.' };
     return { ...next, expression: expression + key.value, evaluated: false, result: '0', modifier: '' };
   }
