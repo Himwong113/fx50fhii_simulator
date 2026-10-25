@@ -1,0 +1,20 @@
+node_modules/
+dist/
+.codebase-memory/
+
+# Local environment and configuration
+.env
+.env.*
+!.env.example
+*.local
+
+# Logs and test output
+*.log
+coverage/
+
+# Editor and OS files
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
