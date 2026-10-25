@@ -15,6 +15,7 @@ Open the Local URL printed by Vite. To produce a static build, run `npm run buil
 
 - Clickable calculator keys and replay pad.
 - Basic arithmetic with precedence, parentheses, decimals, sign, powers, square root, inverse, EXP, Ans, DEL, AC, and EXE.
+- EXP inserts `e` for scientific notation: `2`, `EXP`, `3`, `EXE` shows `2e3` and gives `2000`. Negative exponents work too (`1.2e−3` gives `0.0012`). This input uses the powers feature's injected key binding.
 - Adjacent factors multiply automatically: `(2)(4)`, `2(4)` and `(2)4` all give `8`. Omitted multiplication has priority over explicit × and ÷, following manual Ch-66.
 - The power key (and keyboard `^`) inserts `^(`. Enter `2`, `^`, `3`, `EXE` to display `2^(3` and calculate `8`; the exponent's final `)` is optional before EXE.
 - Square root uses prefix notation: press `√`, enter the value, then `)` and `EXE` (for example `√(9)` gives `3`). The final root-closing parenthesis can be omitted before `EXE`.

@@ -1,6 +1,7 @@
 export default {
   id: 'powers',
   bindings: [
+    { key: 'EXP', value: 'e' },
     { key: '^', value: '^(' },
     { key: 'x²', value: '²', continueResult: true },
     { key: 'x³', value: '³', continueResult: true },
