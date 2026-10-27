@@ -18,7 +18,7 @@ export function createComplexMath(base) {
       (a.im / scale * re - a.re / scale * im) / denominator);
   };
   function power(a, b) {
-    if (b.im === 0 && Number.isInteger(b.re) && Math.abs(b.re) <= 1024) {
+    if (b.im === 0 && Number.isSafeInteger(b.re)) {
       let result = complex(1), factor = a, exponent = Math.abs(b.re);
       while (exponent) {
         if (exponent % 2) result = multiply(result, factor);
@@ -65,10 +65,14 @@ export function createComplexMath(base) {
     },
     conjugate: value => { const z = pair(value); return complex(z.re, -z.im); },
     magnitude: value => { const z = pair(value); return Math.hypot(z.re, z.im); },
-    argument: value => { const z = pair(value); return Math.atan2(z.im, z.re) * 180 / Math.PI; },
+    argument: value => {
+      const z = pair(value), angle = Math.atan2(z.im, z.re);
+      return base.fromRadians ? base.fromRadians(angle) : angle * 180 / Math.PI;
+    },
     polar(radius, angle) {
-      const r = real(radius), degrees = real(angle);
-      const radians = degrees * Math.PI / 180;
+      const r = real(radius), input = real(angle);
+      const radians = base.toRadians ? base.toRadians(input) : input * Math.PI / 180;
+      const degrees = base.angleUnit === 'rad' ? input * 180 / Math.PI : base.angleUnit === 'gra' ? input * .9 : input;
       // Preserve exact axis values without discarding small nonzero components.
       const quadrant = ((degrees % 360) + 360) % 360;
       if (Number.isInteger(degrees / 90)) {

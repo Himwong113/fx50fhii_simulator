@@ -1,0 +1,14 @@
+.setup-screen { height: 70px; display: flex; flex-direction: column; gap: 3px; outline: none; min-width: 0; }
+.setup-screen button { color: inherit; background: transparent; border: 0; border-radius: 2px; padding: 2px 3px; font: inherit; cursor: pointer; }
+.setup-screen button:hover, .setup-screen button:focus-visible { background: #536b5925; }
+.setup-title { display: flex; justify-content: space-between; font-size: 12px; line-height: 17px; }
+.setup-title > span + span { font-size: 10px; }
+.setup-options { display: flex; gap: 4px; align-items: center; font-size: 13px; }
+.setup-options > button { flex: 1; white-space: nowrap; }
+.setup-digits { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0 2px; font-size: 10px; }
+.setup-digits > button { padding: 0; line-height: 14px; }
+.setup-navigation { display: flex; align-items: center; justify-content: space-between; font-size: 9px; }
+.setup-navigation > button { font-size: 12px; }
+.setup-hint { font-size: 9px; line-height: 12px; white-space: nowrap; }
+.setup-contrast { display: flex; align-items: center; gap: 10px; }
+.setup-contrast meter { flex: 1; min-width: 0; accent-color: #304934; }

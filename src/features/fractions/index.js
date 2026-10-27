@@ -33,7 +33,16 @@ export default {
     { key: 'a b/c', action: 'fractions.toggle' },
     { key: 'a b/c', modifier: 'SHIFT', action: 'fractions.toggle' },
   ],
-  actions: { 'fractions.toggle': toggle, fraction: toggle },
+  actions: {
+    'fractions.toggle': toggle, fraction: toggle,
+    'fractions.set-style'(state, key, ctx) {
+      if (!['mixed', 'improper'].includes(key.style)) return state;
+      const updated = ctx.setFeatureState(state, { style: key.style });
+      if (!state.evaluated || state.resultMode !== 'fraction') return updated;
+      const text = ctx.math.formatFraction(state.answerFraction, key.style);
+      return ctx.setResult(updated, text ?? String(state.answer), text === null ? 'decimal' : 'fraction');
+    },
+  },
   onClear: (cleared, previous, ctx) => ctx.setFeatureState(cleared, { style: ctx.getFeatureState(previous).style }),
   expression: {
     parsePrimary(parser) {

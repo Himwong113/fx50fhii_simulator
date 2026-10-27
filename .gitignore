@@ -30,3 +30,4 @@ Thumbs.db
 *.swo
 *~
 *.png
+deploy-pages.sh

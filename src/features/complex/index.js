@@ -12,17 +12,17 @@ function selectMode(state, mode, ctx) {
   const answer = state.answerMode === 'complex' ? current.answer : { re: state.answer, im: 0 };
   const next = ctx.setFeatureState(state, { enabled: mode === 2, menu: null, answer, result: null, component: 0 });
   return {
-    ...ctx.deactivate(next), expression: '', cursor: null, result: '0', evaluated: false,
+    ...ctx.deactivate(next), expression: '', cursor: null, historyIndex: null, result: '0', evaluated: false,
     answer: mode === 1 && answer.im !== 0 ? 0 : answer.re, answerFraction: null,
     answerMode: mode === 2 ? 'complex' : 'decimal', resultMode: 'decimal',
   };
 }
 function clear(state, ctx) {
-  return { ...ctx.setFeatureState(state, { result: null, component: 0 }), expression: '', cursor: null, result: '0', evaluated: false, modifier: '' };
+  return { ...ctx.setFeatureState(state, { result: null, component: 0 }), expression: '', cursor: null, historyIndex: null, result: '0', evaluated: false, modifier: '' };
 }
 function edit(state, text, ctx, cursor = null) {
   if (typeof text !== 'string' || text.length > 80) return { ...state, notice: 'Expression limit reached.' };
-  return { ...ctx.setFeatureState(state, { result: null, component: 0 }), expression: text, cursor, result: '0', evaluated: false, modifier: '' };
+  return { ...ctx.setFeatureState(state, { result: null, component: 0 }), expression: text, cursor, historyIndex: null, result: '0', evaluated: false, modifier: '' };
 }
 function execute(state, ctx) {
   // Real-valued recall/storage operations update the shared answer outside this mode.
@@ -34,11 +34,11 @@ function execute(state, ctx) {
     return {
       ...ctx.setFeatureState(next, { result, answer: result, component: 0 }),
       result: text, answer: result.re, answerFraction: null, answerMode: 'complex', resultMode: 'complex',
-      evaluated: true, cursor: null, modifier: '',
+      evaluated: true, cursor: null, historyIndex: null, modifier: '',
       history: state.expression ? [{ expression: state.expression, result: text }, ...state.history].slice(0, 3) : state.history,
     };
   } catch (error) {
-    return { ...ctx.setFeatureState(next, { result: null }), result: error.message, evaluated: true, cursor: null, modifier: '' };
+    return { ...ctx.setFeatureState(next, { result: null }), result: error.message, evaluated: true, cursor: null, historyIndex: null, modifier: '' };
   }
 }
 function toggle(state, ctx) {
@@ -77,6 +77,11 @@ export default {
   onClear(cleared, previous, ctx) {
     const current = ctx.getFeatureState(previous);
     return ctx.setFeatureState(cleared, { ...current, menu: null, result: null, component: 0 });
+  },
+  onReplay(state, entry, ctx) {
+    if (!ctx.getFeatureState(state).enabled) return state;
+    const result = ctx.evaluateState(state, entry.result).complex;
+    return ctx.setFeatureState(state, { result, component: 0 });
   },
   handleActiveKey(state, key, ctx) {
     if (key.action?.startsWith('complex.')) return;

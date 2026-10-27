@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { getFormula, formulaNumber } from './data.js';
 
-export default function FormulasScreen({ featureState: current, dispatch }) {
+export default function FormulasScreen({ state, featureState: current, dispatch, calculator }) {
   const field = useRef(null);
   const choice = useRef(null);
   const formula = getFormula(current.formulaId);
@@ -72,6 +72,7 @@ export default function FormulasScreen({ featureState: current, dispatch }) {
     </div>;
   }
 
+  const display = calculator.formatResult(state, current.results[current.resultIndex]);
   return <div className="formulas-screen" aria-label={`Formula ${number} result`}>
     <div className="formulas-title">{number}: {formula.name}
       <button type="button" aria-label="Edit formula inputs" onClick={() => send('select', { id: formula.id })}>Edit</button>
@@ -79,8 +80,8 @@ export default function FormulasScreen({ featureState: current, dispatch }) {
     <div className="formulas-result-row">
       {current.results.length > 1 && <button type="button" aria-label="Previous root" onClick={() => send('result', { offset: -1 })}>◀</button>}
       <span className="formulas-result-name">{formula.outputs[current.resultIndex]}=</span>
-      <output aria-label={`${formula.outputs[current.resultIndex]} = ${current.results[current.resultIndex]}${formula.outputUnits ? ` ${formula.outputUnits[current.resultIndex]}` : ''}`} className="formulas-result">
-        {current.results[current.resultIndex]}
+      <output aria-label={`${formula.outputs[current.resultIndex]} = ${display}${formula.outputUnits ? ` ${formula.outputUnits[current.resultIndex]}` : ''}`} className="formulas-result">
+        {display}
       </output>
       {formula.outputUnits && <span className="formulas-result-name">{formula.outputUnits[current.resultIndex]}</span>}
       {current.results.length > 1 && <button type="button" aria-label="Next root" onClick={() => send('result', { offset: 1 })}>▶</button>}

@@ -3,11 +3,21 @@
 
 .expression-cursor {
   display: inline-block;
-  width: 0;
-  height: 1em;
-  border-left: 1px solid currentColor;
-  vertical-align: text-bottom;
+  width: .35em;
+  font-weight: bold;
+  letter-spacing: 0;
+  text-align: center;
 }
+
+.history-indicators {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 7px;
+  line-height: 6px;
+}
+.history-arrow { visibility: hidden; }
+.history-arrow.indicator-on { visibility: visible; }
 
 /* Keep the calculator upright and put supporting panels behind the menu. */
 .app {
@@ -185,7 +195,52 @@
   .drawer-panel.intro { padding: 24px 20px; }
 }
 
-/* Manual Ch-5 / Ch-26: reciprocal and cube keys, with separate mode legends. */
+/* Printed mode legends: manual Ch-5 and Ch-31–34. */
+.key-bottom-legends {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  height: 10px;
+  font-family: Arial, sans-serif;
+  font-size: 7px;
+  line-height: 8px;
+  white-space: nowrap;
+  pointer-events: none;
+}
+.key-complex-legend {
+  color: #7e5199;
+  font-family: 'Times New Roman', serif;
+  font-size: 14px;
+  font-style: italic;
+  font-weight: 600;
+  line-height: 12px;
+}
+.key-mode-shift {
+  display: inline-block;
+  padding: 0 1px;
+  color: #927123;
+  border: 1px solid;
+  border-bottom: 0;
+  line-height: 7px;
+}
+.key-mode-complex { border-color: #8c65a2; }
+.key-mode-statistic { border-color: #5485a8; }
+.key-statistic-legend { color: #487ca6; }
+.key-legend .key-alpha-base {
+  border: 1px solid #477e6d;
+  border-bottom: 0;
+  padding: 0 1px;
+  line-height: 7px;
+}
+.number-keys .key-legend { gap: 2px; }
+.number-keys .key-mode-shift { font-size: 6px; }
+
+/* Manual Ch-26: reciprocal and cube keys. */
 .power-key-wrap .key-legend {
   justify-content: center;
   gap: 3px;

@@ -14,7 +14,10 @@ export default {
   id: 'constants',
   screen: true,
   initialState: { page: null },
-  bindings: [{ key: '7', modifier: 'SHIFT', action: 'constants.open' }],
+  bindings: [
+    { key: '7', modifier: 'SHIFT', action: 'constants.open' },
+    { key: 'EXP', modifier: 'SHIFT', value: 'π' },
+  ],
   actions: {
     'constants.open': (state, key, ctx) => ({ ...ctx.activate(ctx.setFeatureState(state, { page: 0 })), notice: 'Choose a constant with 1–4. Use ◀/▶ for more.' }),
   },

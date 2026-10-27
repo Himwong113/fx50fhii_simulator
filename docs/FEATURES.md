@@ -64,9 +64,28 @@ Definitions are plain JavaScript modules with a default export and no React or b
 - `actions`: namespaced action handlers `(state, key, ctx) => newState`.
 - `handleActiveKey`: optional `(state, key, ctx)` handler for a feature's active LCD menu. Return `undefined` to delegate to normal actions/core handling. An active screen receives keys before ordinary bindings.
 - `onClear(cleared, previous, ctx)`: optional reset hook to preserve a setting. By default, AC resets feature state while preserving the calculator answer/history.
+- `onReplay(state, entry, ctx)`: optional display restoration hook when history is recalled. Keep the current answer unchanged; complex mode restores its displayed components from the stored result.
 - `screen: true`: declares a required `Screen.jsx`.
 - `status(state)`: optional active-screen status label.
 - `priority`: parser/formatter ordering, highest first; ties use feature ID. Avoid overlapping syntax. Key/action collisions remain errors regardless of priority.
+
+Settings integrations may also supply these optional hooks:
+
+- `configureMath(math, state)`: returns a per-state service extension. The factory
+  applies these hooks before the active mode's `createMath`. Neither the injected
+  base service nor feature state should be mutated. `ctx.getMath(state)` and
+  `calculator.getMath(state)` expose the configured service. Trigonometry and
+  complex angles consume optional `angleUnit`, `toRadians` and `fromRadians`.
+- `formatResult(text, state)`: formats LCD text without changing Ans, exact
+  fractions or history. Screens call `calculator.formatResult(state, value?)`.
+- `indicators(state)`: returns `{ label, active }` entries for the LCD.
+- `displayStyle(state)`: returns an inline style object for the LCD only.
+
+A binding may set `global: true` for a shortcut that must open over an active
+screen/mode, such as SHIFT → MODE (SETUP). Other bindings retain normal active
+screen ownership. The shortcut's owner must manage returning to the previous
+screen. New features are still discovered through their own folders; these hooks
+do not require a shared registration entry.
 
 The handler context supplies injected `math`, `evaluate`, `evaluateState(state, expression?)`, `append(state, text, { continueResult? })`, `setResult(state, result, mode)`, `getFeatureState(state)`, `setFeatureState(state, patch)`, `activate(state)` and `deactivate(state)`. `append` handles expression limits and starting/chaining a result (ordinary arithmetic operators chain by default); `setResult` also updates the most recent history entry. `activate`/`deactivate` control the generic `state.activeFeature` screen slot. A screen feature should own and clear its own menu state as the constants feature does.
 
@@ -80,7 +99,17 @@ feature's namespace directly.
 
 Core state contains the expression, cursor, result, answer, modes, modifier, history and `activeFeature`. `cursor` is a stored-expression offset, with `null` meaning the end; `getCursorPosition(state)` is available on the calculator and handler context to resolve it. `append` inserts at that position. Left/right replay after EXE enters editing at the end/start respectively; subsequent presses move between complete input tokens, and DEL removes the token before the cursor. EXE resets the cursor to `null`. Features that call `append` with a separate temporary expression should also set `cursor: null` to append to that input independently. Feature settings live in namespaces: for example `state.features.fractions.style` and `state.features.constants.page`.
 
+History replay follows manual Ch-16–17. `historyIndex` is the selected entry, or `null` outside browsing. Up selects an older calculation, skipping the newest entry when it is already displayed; after AC it recalls the newest entry. Down selects a newer entry. Navigation stops at either end. Recalling an entry restores its saved expression/result without replacing Ans. `getHistoryDirections(state)` supplies `{ older, newer }` for the LCD's top-right ▲/▼ indicators. ON, a change of calculation mode, and setup reset erase history; AC preserves it. Input and execution leave browsing, and editing a recalled calculation creates a new history entry when executed.
+
 ### Expression hooks
+
+Persistent calculation modes can implement `isModeActive(state)` and
+`createMath(baseMath)`. The selected mode receives keys and supplies its LCD
+screen when no temporary `activeFeature` menu owns the display. Its math adapter
+is used by `evaluateState`; ordinary `evaluate` remains mode-independent.
+`calculator.getModeFeatureId(state)` identifies the fallback screen.
+`ctx.handleDefaultKey(state, key)` resolves bindings and applies ordinary
+calculator behavior without re-entering the active menu/mode handler.
 
 `expression` may define:
 
@@ -89,6 +118,20 @@ Core state contains the expression, cursor, result, answer, modes, modifier, his
 - `startsPrimary(remaining)` and `endsPrimary(prefix)`: recognize boundaries for implicit multiplication.
 - `deleteLength(expression)`: atomic trailing-token length, or zero.
 - `format(text)`: convert stored tokens to display text, without changing the stored expression.
+- `parsePostfix(parser, value)`: optional operator after a complete power,
+  before implicit multiplication. Return a replacement value after consuming
+  the operator and its argument, or return `undefined` without advancing.
+  Complex mode uses this for `r∠θ`, with `readPower()` reading the angle.
+- `parseInfix(parser, value)`: optional operator after implicit multiplication
+  and before explicit ×/÷. Return the replacement value after consuming a match,
+  or `undefined` without advancing. Operators at this level associate left to
+  right. `readImplicitProduct()` reads a right operand without consuming the
+  next infix operator. Combinatorics uses this for nPr/nCr (manual Ch-66).
+
+An injected math service can implement `finalize(scalar)` to return its evaluated
+result object instead of the default real-number finalization. Complex mode
+returns a real `value` plus a `{ re, im }` pair; its mode handler preserves that
+pair in its namespace and uses `answerMode: 'complex'` for its shared projection.
 
 The parser supplies `source`, `position`, `remaining`, `consume(count)`, `readNumber()`, `readExpression()`, `readPower()`, `closeOptionalGroup()`, `getFeatureState(id)`, `math` and calculation `metadata`. `readPower()` reads one primary and its following exponent chain, allowing an omitted final closing parenthesis; it stops before multiplication, division, addition or subtraction outside the primary's group. Roots use it to evaluate `√(−5)²` as `√((−5)²)`, returning `5`. `getFeatureState` exposes the current calculator instance’s feature namespace for stateful primaries such as variables; treat it as read-only. Use `ctx.evaluateState(state)` to evaluate with those same values inside an action, and `calculator.evaluateState(state, expression)` for programmatic evaluation with a specific state. Use its methods rather than evaluating JavaScript or modifying a separate cursor. `closeOptionalGroup` accepts a closing `)` or the end of an otherwise valid expression. New top-level operators/precedence rules still require a shared grammar change; function-style features do not.
 

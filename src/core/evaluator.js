@@ -26,6 +26,7 @@ export function createEvaluator({ math, features }) {
       },
       readExpression: () => sum(),
       readPower: () => power(true),
+      readImplicitProduct: () => implicitProduct(),
       closeOptionalGroup() {
         if (source[position] === ')') position++;
         else if (position !== source.length) throw new Error('Syntax ERROR');
@@ -87,11 +88,29 @@ export function createEvaluator({ math, features }) {
       }
       return value;
     }
-    function product() {
+    function infix() {
       let value = implicitProduct();
+      while (true) {
+        let matched = false;
+        for (const feature of features) {
+          const before = position;
+          const next = feature.expression?.parseInfix?.(parser, value);
+          if (next !== undefined) {
+            if (position <= before) throw new Error(`Feature ${feature.id} must consume its infix expression`);
+            value = next;
+            matched = true;
+            break;
+          }
+          if (position !== before) throw new Error(`Feature ${feature.id} consumed an unmatched infix expression`);
+        }
+        if (!matched) return value;
+      }
+    }
+    function product() {
+      let value = infix();
       while (source[position] === '*' || source[position] === '/') {
         const op = source[position++];
-        value = math.binary(op, value, implicitProduct());
+        value = math.binary(op, value, infix());
       }
       return value;
     }

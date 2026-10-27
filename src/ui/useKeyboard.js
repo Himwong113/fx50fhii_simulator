@@ -15,6 +15,8 @@ export function useKeyboard() {
         '^': { label: '^' },
         ArrowLeft: { label: '◀', action: 'replay', direction: 'left' },
         ArrowRight: { label: '▶', action: 'replay', direction: 'right' },
+        ArrowUp: { label: '▲', action: 'replay', direction: 'up' },
+        ArrowDown: { label: '▼', action: 'replay', direction: 'down' },
       };
       const key = mapped[event.key] || (/^[0-9.()+]$/.test(event.key) ? { label: event.key, value: event.key } : null);
       if (key) { event.preventDefault(); dispatch(key); }

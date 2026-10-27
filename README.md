@@ -11,6 +11,18 @@ npm run dev
 
 Open the Local URL printed by Vite. To produce a static build, run `npm run build`; `npm run preview` serves that build.
 
+## Publish to GitHub Pages
+
+After committing your changes, run:
+
+```sh
+./deploy-pages.sh
+```
+
+The script installs dependencies, runs tests, builds the latest local commit in a temporary directory, and pushes the result to `origin`'s `gh-pages` branch. Uncommitted changes are excluded. It requires Git, Node.js/npm, a configured Git name/email, and GitHub push access. To use another remote, run `./deploy-pages.sh <remote>`.
+
+GitHub Pages is configured to serve `gh-pages` from `/`. The site is available at <https://himwong113.github.io/fx50fhii_simulator/> after deployment finishes.
+
 ## First-version behavior
 
 - Clickable calculator keys and replay pad.

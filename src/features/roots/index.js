@@ -1,15 +1,21 @@
+import { cubeRoot } from './cubeRoot.js';
+
 export default {
   id: 'roots',
-  bindings: [{ key: '√', value: '√(' }],
+  bindings: [
+    { key: '√', value: '√(' },
+    { key: 'x³', modifier: 'SHIFT', value: '∛(' },
+  ],
   expression: {
-    startsPrimary: remaining => remaining.startsWith('√('),
-    deleteLength: text => text.endsWith('√(') ? 2 : 0,
+    startsPrimary: remaining => /^(?:√|∛)\(/.test(remaining),
+    deleteLength: text => /(?:√|∛)\($/.test(text) ? 2 : 0,
     parsePrimary(parser) {
-      if (!parser.remaining.startsWith('√(')) return;
+      const match = parser.remaining.match(/^(√|∛)\(/);
+      if (!match) return;
       // Keep the argument's opening group so a following power belongs to the radicand.
       parser.consume(1);
       const value = parser.readPower();
-      return parser.math.squareRoot(value);
+      return match[1] === '∛' ? cubeRoot(value, parser.math) : parser.math.squareRoot(value);
     },
   },
 };

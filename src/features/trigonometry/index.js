@@ -1,18 +1,20 @@
 const FUNCTION = /^(a?)(sin|cos|tan)\(/;
 const FUNCTIONS = ['sin', 'cos', 'tan'];
 
-function calculate(name, inverse, value) {
+function calculate(name, inverse, value, math) {
   if (!Number.isFinite(value)) throw new Error('Math ERROR');
   if (inverse) {
     // Manual Ch-68: asin/acos accept [-1, 1]; atan accepts calculator scalars.
     const limit = name === 'tan' ? 9.999999999e99 : 1;
     if (Math.abs(value) > limit) throw new Error('Math ERROR');
-    return Math[`a${name}`](value) * (180 / Math.PI);
+    const radians = Math[`a${name}`](value);
+    return math.fromRadians ? math.fromRadians(radians) : radians * (180 / Math.PI);
   }
 
-  // Manual Ch-67–68, DEG: |x| < 9 × 10^9, excluding odd 90° for tan.
-  if (Math.abs(value) >= 9e9) throw new Error('Math ERROR');
-  const angle = value % 360;
+  const degrees = math.angleUnit === 'rad' ? value * 180 / Math.PI : math.angleUnit === 'gra' ? value * .9 : value;
+  // Manual Ch-67–68: equivalent limits in Deg/Rad/Gra; tan excludes odd quarter turns.
+  if (Math.abs(degrees) >= 9e9) throw new Error('Math ERROR');
+  const angle = degrees % 360;
   if (name === 'tan' && Math.abs(angle % 180) === 90) throw new Error('Math ERROR');
 
   // Exact quadrant values avoid residuals such as cos(90) = 6e-17.
@@ -49,8 +51,7 @@ export default {
       const argument = parser.readExpression();
       parser.closeOptionalGroup();
       parser.metadata.containsDecimal = true;
-      // The simulator currently exposes the manual's default DEG mode.
-      return calculate(match[2], Boolean(match[1]), parser.math.numeric(argument));
+      return calculate(match[2], Boolean(match[1]), parser.math.numeric(argument), parser.math);
     },
   },
 };
