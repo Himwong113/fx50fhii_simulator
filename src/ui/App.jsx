@@ -6,7 +6,10 @@ import { useKeyboard } from './useKeyboard.js';
 
 function Workspace() {
   useKeyboard();
-  return <div className="app"><HistoryDrawer /><main className="workspace"><CalculatorBody /></main></div>;
+  return <div className="app"><HistoryDrawer /><main className="workspace">
+    <CalculatorBody />
+    <p className="research-disclaimer"><strong>For research purposes only.</strong> Not affiliated with CASIO.</p>
+  </main></div>;
 }
 export function App({ runtime }) {
   return <CalculatorProvider runtime={runtime}><Workspace /></CalculatorProvider>;

@@ -2,6 +2,8 @@
 
 A local React + Vite webpage inspired by the Casio fx-50FH II. This first version focuses on reviewing clickable button positions, labels, and the display.
 
+**Disclaimer:** This unofficial simulator is for research purposes only and is not affiliated with CASIO.
+
 ## Run
 
 ```sh
