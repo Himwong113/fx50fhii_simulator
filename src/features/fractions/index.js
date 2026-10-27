@@ -19,8 +19,9 @@ function toggle(state, key, ctx) {
     if (text === null) return { ...current, notice: 'This fraction exceeds the 10-character display limit.' };
     return ctx.setResult({ ...current, answerFraction: exact }, text, 'fraction');
   }
-  if (!/\d$/.test(state.expression)) return { ...current, notice: 'Enter a number before a b/c.' };
-  const tail = state.expression.match(/[\d.┘]+$/)?.[0] || '';
+  const prefix = state.expression.slice(0, ctx.getCursorPosition(state));
+  if (!/\d$/.test(prefix)) return { ...current, notice: 'Enter a number before a b/c.' };
+  const tail = prefix.match(/[\d.┘]+$/)?.[0] || '';
   if ((tail.match(/┘/g) || []).length >= 2) return { ...current, notice: 'Use numerator┘denominator or whole┘numerator┘denominator.' };
   return ctx.append(current, '┘');
 }

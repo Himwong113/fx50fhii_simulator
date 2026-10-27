@@ -70,7 +70,15 @@ Definitions are plain JavaScript modules with a default export and no React or b
 
 The handler context supplies injected `math`, `evaluate`, `evaluateState(state, expression?)`, `append(state, text, { continueResult? })`, `setResult(state, result, mode)`, `getFeatureState(state)`, `setFeatureState(state, patch)`, `activate(state)` and `deactivate(state)`. `append` handles expression limits and starting/chaining a result (ordinary arithmetic operators chain by default); `setResult` also updates the most recent history entry. `activate`/`deactivate` control the generic `state.activeFeature` screen slot. A screen feature should own and clear its own menu state as the constants feature does.
 
-Core state contains the expression, result, answer, modes, modifier, history and `activeFeature`. Feature settings live in namespaces: for example `state.features.fractions.style` and `state.features.constants.page`.
+For integration between features, `applyAction(state, key)` calls a registered
+namespaced action with its owning feature's context. It bypasses active-screen
+key handling and leaves key/notice metadata unchanged. If the target feature is
+absent, it returns the state unchanged. For example, formulas use
+`ctx.applyAction(state, { action: 'variables.assign', values: { X, Y } })` to
+save quadratic roots through the variables feature instead of writing another
+feature's namespace directly.
+
+Core state contains the expression, cursor, result, answer, modes, modifier, history and `activeFeature`. `cursor` is a stored-expression offset, with `null` meaning the end; `getCursorPosition(state)` is available on the calculator and handler context to resolve it. `append` inserts at that position. Left/right replay after EXE enters editing at the end/start respectively; subsequent presses move between complete input tokens, and DEL removes the token before the cursor. EXE resets the cursor to `null`. Features that call `append` with a separate temporary expression should also set `cursor: null` to append to that input independently. Feature settings live in namespaces: for example `state.features.fractions.style` and `state.features.constants.page`.
 
 ### Expression hooks
 
@@ -82,7 +90,7 @@ Core state contains the expression, result, answer, modes, modifier, history and
 - `deleteLength(expression)`: atomic trailing-token length, or zero.
 - `format(text)`: convert stored tokens to display text, without changing the stored expression.
 
-The parser supplies `source`, `position`, `remaining`, `consume(count)`, `readNumber()`, `readExpression()`, `closeOptionalGroup()`, `getFeatureState(id)`, `math` and calculation `metadata`. `getFeatureState` exposes the current calculator instance’s feature namespace for stateful primaries such as variables; treat it as read-only. Use `ctx.evaluateState(state)` to evaluate with those same values inside an action, and `calculator.evaluateState(state, expression)` for programmatic evaluation with a specific state. Use its methods rather than evaluating JavaScript or modifying a separate cursor. `closeOptionalGroup` accepts a closing `)` or the end of an otherwise valid expression. New top-level operators/precedence rules still require a shared grammar change; function-style features do not.
+The parser supplies `source`, `position`, `remaining`, `consume(count)`, `readNumber()`, `readExpression()`, `readPower()`, `closeOptionalGroup()`, `getFeatureState(id)`, `math` and calculation `metadata`. `readPower()` reads one primary and its following exponent chain, allowing an omitted final closing parenthesis; it stops before multiplication, division, addition or subtraction outside the primary's group. Roots use it to evaluate `√(−5)²` as `√((−5)²)`, returning `5`. `getFeatureState` exposes the current calculator instance’s feature namespace for stateful primaries such as variables; treat it as read-only. Use `ctx.evaluateState(state)` to evaluate with those same values inside an action, and `calculator.evaluateState(state, expression)` for programmatic evaluation with a specific state. Use its methods rather than evaluating JavaScript or modifying a separate cursor. `closeOptionalGroup` accepts a closing `)` or the end of an otherwise valid expression. New top-level operators/precedence rules still require a shared grammar change; function-style features do not.
 
 ### Optional React modules
 

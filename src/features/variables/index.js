@@ -34,6 +34,13 @@ function select(state, name, ctx) {
     return { ...showValue(updated, saved, `${expression}→${name}`, ctx), notice: `Stored ${saved.value} in ${name}.` };
   } catch (error) { return fail(state, error, ctx); }
 }
+function assign(state, values, ctx) {
+  const saved = Object.fromEntries(Object.entries(values).map(([name, value]) => {
+    if (!VARIABLE_NAMES.includes(name) || !Number.isFinite(value) || Math.abs(value) >= 1e100) throw new Error('Math ERROR');
+    return [name, { value, fraction: null }];
+  }));
+  return ctx.setFeatureState(state, { values: { ...ctx.getFeatureState(state).values, ...saved } });
+}
 function accumulate(state, sign, ctx) {
   try {
     const input = inputValue(state, ctx), memory = ctx.getFeatureState(state);
@@ -60,6 +67,7 @@ export default {
     ...Object.entries(VARIABLE_KEYS).map(([key, variable]) => ({ key, modifier: 'ALPHA', action: 'variables.insert', variable })),
   ],
   actions: {
+    'variables.assign': (state, key, ctx) => assign(state, key.values, ctx),
     'variables.store': (state, key, ctx) => ctx.activate(ctx.setFeatureState(state, { mode: 'store' })),
     'variables.recall': (state, key, ctx) => ctx.activate(ctx.setFeatureState(state, { mode: 'recall' })),
     'variables.insert': (state, key, ctx) => ctx.append(state, key.variable),

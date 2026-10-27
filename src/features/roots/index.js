@@ -6,9 +6,9 @@ export default {
     deleteLength: text => text.endsWith('√(') ? 2 : 0,
     parsePrimary(parser) {
       if (!parser.remaining.startsWith('√(')) return;
-      parser.consume(2);
-      const value = parser.readExpression();
-      parser.closeOptionalGroup();
+      // Keep the argument's opening group so a following power belongs to the radicand.
+      parser.consume(1);
+      const value = parser.readPower();
       return parser.math.squareRoot(value);
     },
   },

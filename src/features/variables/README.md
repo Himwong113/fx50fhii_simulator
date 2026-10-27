@@ -18,10 +18,16 @@ Follows repo manual Ch-19–21. Six variables A, B, C, D, X, Y and independent m
 - **Clear one variable:** store `0` to that variable.
 - **Independent M memory:** `M+` adds the current input/result; `SHIFT M+` subtracts it. `RCL M+` recalls the accumulated total.
 - `AC` and `ON` preserve stored values; `AC` while choosing a destination cancels the chooser. Unassigned variables are zero.
+- Successful **FMLA 01** calculations automatically store the first quadratic root in **X** and the second in **Y**.
 
 Storage evaluates unfinished input before assigning it. Invalid input never overwrites an existing value. Fractions keep their exact numerator/denominator through storage and later calculations. Store/recall operations display results as decimals, consistent with the simulator's chosen default.
 
 The feature uses `ctx.evaluateState(state)` and `parser.getFeatureState('variables')` to read current values without shared mutable state. The evaluator's optional fifth argument injects feature namespaces for direct programmatic use. Standard `Ans`, constants, logarithms, trigonometry and implicit multiplication remain independent.
+
+Other features can save computed numeric values through
+`ctx.applyAction(state, { action: 'variables.assign', values: { X, Y } })`.
+This assigns all supplied values atomically within the variables namespace,
+preserves other memory, and does not change the active screen, Ans or history.
 
 ```sh
 node --test src/features/variables/*.test.js

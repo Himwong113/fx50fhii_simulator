@@ -130,3 +130,21 @@ test('M+ and SHIFT M− follow the independent-memory example and preserve exact
   state = store(press([clear, '0'], state), 'M');
   assert.equal(state.features.variables.values.M.value, 0);
 });
+
+test('computed values are assigned atomically without changing the display or other memory', () => {
+  const state = store(press(['8']), 'A');
+  const snapshot = structuredClone(state);
+  const updated = calculator.reducer(state, { label: 'Assign roots', action: 'variables.assign', values: { X: 2, Y: 1 } });
+  assert.deepEqual(state, snapshot);
+  assert.deepEqual(updated.features.variables.values.X, { value: 2, fraction: null });
+  assert.deepEqual(updated.features.variables.values.Y, { value: 1, fraction: null });
+  assert.deepEqual(updated.features.variables.values.A, state.features.variables.values.A);
+  for (const field of ['expression', 'result', 'answer', 'answerFraction', 'evaluated', 'activeFeature', 'history']) {
+    assert.deepEqual(updated[field], state[field]);
+  }
+  for (const values of [{ X: 5, Y: Infinity }, { X: 5, Z: 1 }, { X: 5, Y: 1e100 }]) {
+    assert.throws(() => calculator.reducer(updated, { action: 'variables.assign', values }), /Math ERROR/);
+    assert.deepEqual(updated.features.variables.values.X, { value: 2, fraction: null });
+    assert.deepEqual(updated.features.variables.values.Y, { value: 1, fraction: null });
+  }
+});

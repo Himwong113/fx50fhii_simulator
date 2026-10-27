@@ -3,7 +3,7 @@ import { calculateFormula } from './calculate.js';
 
 function open(state, ctx) {
   return ctx.activate(ctx.setFeatureState(state, {
-    phase: 'select', numberInput: '', input: '', error: '', results: [], resultIndex: 0,
+    phase: 'select', browsing: false, numberInput: '', input: '', error: '', results: [], resultIndex: 0,
   }));
 }
 
@@ -12,23 +12,24 @@ function close(state, ctx) {
 }
 
 function select(state, id, ctx) {
-  if (!getFormula(id)) return ctx.setFeatureState(state, { error: 'Choose 01–05' });
+  if (!getFormula(id)) return ctx.setFeatureState(state, { error: 'Choose 01–23' });
   return ctx.setFeatureState(state, {
-    phase: 'input', formulaId: id, parameterIndex: 0, numberInput: '', input: '', error: '', results: [], resultIndex: 0,
+    phase: 'input', formulaId: id, browsing: false, parameterIndex: 0, numberInput: '', input: '', error: '', results: [], resultIndex: 0,
   });
 }
 
 function numberInput(state, text, ctx) {
   if (!/^\d{0,2}$/.test(text)) return state;
-  const next = ctx.setFeatureState(state, { numberInput: text, error: '' });
+  const next = ctx.setFeatureState(state, { numberInput: text, browsing: false, error: '' });
   return text.length === 2 ? select(next, Number(text), ctx) : next;
 }
 
 function browse(state, offset, ctx) {
-  const { formulaId } = ctx.getFeatureState(state);
-  const index = FORMULAS.findIndex(formula => formula.id === formulaId);
+  const { formulaId, browsing } = ctx.getFeatureState(state);
+  const index = browsing ? FORMULAS.findIndex(formula => formula.id === formulaId) : offset > 0 ? -1 : 0;
   return ctx.setFeatureState(state, {
-    formulaId: FORMULAS[(index + offset + FORMULAS.length) % FORMULAS.length].id, numberInput: '', error: '',
+    formulaId: FORMULAS[(index + offset + FORMULAS.length) % FORMULAS.length].id,
+    browsing: true, numberInput: '', error: '',
   });
 }
 
@@ -61,7 +62,10 @@ function publish(state, index, ctx, appendHistory = false) {
 
 function execute(state, ctx) {
   const current = ctx.getFeatureState(state), formula = getFormula(current.formulaId);
-  if (current.phase === 'select') return select(state, current.numberInput ? Number(current.numberInput) : formula.id, ctx);
+  if (current.phase === 'select') {
+    if (!current.numberInput && !current.browsing) return state;
+    return select(state, current.numberInput ? Number(current.numberInput) : formula.id, ctx);
+  }
   if (current.phase === 'result') {
     return current.resultIndex + 1 < current.results.length ? publish(state, current.resultIndex + 1, ctx)
       : select(state, formula.id, ctx);
@@ -81,6 +85,9 @@ function execute(state, ctx) {
     }
     const results = calculateFormula(formula.id, formula.parameters.map(parameterName => values[parameterName]))
       .map(result => ctx.evaluate(String(result)).value);
+    if (formula.id === 1) {
+      next = ctx.applyAction(next, { action: 'variables.assign', values: { X: results[0], Y: results[1] } });
+    }
     return publish(ctx.setFeatureState(next, { results }), 0, ctx, true);
   } catch (error) {
     return ctx.setFeatureState(next, { error: error.message === 'Syntax ERROR' ? 'Syntax ERROR' : 'Math ERROR' });
@@ -89,10 +96,10 @@ function execute(state, ctx) {
 
 export default {
   id: 'formulas',
-  initialState: { phase: null, formulaId: 1, numberInput: '', parameterIndex: 0, values: {}, input: '', error: '', results: [], resultIndex: 0 },
+  initialState: { phase: null, formulaId: 1, browsing: false, numberInput: '', parameterIndex: 0, values: {}, input: '', error: '', results: [], resultIndex: 0 },
   bindings: [{ key: 'FMLA', action: 'formulas.open' }],
   screen: true,
-  status: state => state.features.formulas.phase === 'select' ? 'FMLA 01–05' : 'COMP · FMLA',
+  status: state => state.features.formulas.phase === 'select' ? 'FMLA 01–23' : 'COMP · FMLA',
   actions: {
     'formulas.open': (state, key, ctx) => open(state, ctx),
     'formulas.close': (state, key, ctx) => close(state, ctx),
@@ -118,11 +125,15 @@ export default {
     if (key.action === 'modifier') return;
     const current = ctx.getFeatureState(state);
     if (key.action === 'execute' || key.label === 'EXE') return execute(state, ctx);
-    if (key.action === 'replay' && ['left', 'right'].includes(key.direction)) {
-      const offset = key.direction === 'right' ? 1 : -1;
-      if (current.phase === 'select') return browse(state, offset, ctx);
-      if (current.phase === 'result') return publish(state, (current.resultIndex + offset + current.results.length) % current.results.length, ctx);
-      return parameter(state, offset, ctx);
+    if (key.action === 'replay') {
+      if (current.phase === 'select' && ['up', 'down', 'left', 'right'].includes(key.direction)) {
+        return browse(state, ['down', 'right'].includes(key.direction) ? 1 : -1, ctx);
+      }
+      if (['left', 'right'].includes(key.direction)) {
+        const offset = key.direction === 'right' ? 1 : -1;
+        if (current.phase === 'result') return publish(state, (current.resultIndex + offset + current.results.length) % current.results.length, ctx);
+        return parameter(state, offset, ctx);
+      }
     }
     if (key.action === 'delete') {
       return current.phase === 'select' ? numberInput(state, current.numberInput.slice(0, -1), ctx)
@@ -131,22 +142,22 @@ export default {
     if (state.modifier) return { ...state, modifier: '', notice: 'Use numeric input here, or type an expression in the value field.' };
     if (current.phase === 'select') {
       if (/^\d$/.test(key.value ?? '')) return numberInput(state, (current.numberInput + key.value).slice(-2), ctx);
-      return { ...state, notice: 'Enter 01–05, or use ◀/▶ then EXE. AC exits.' };
+      return { ...state, notice: 'Enter 01–23, or use ▲/▼ then EXE. AC exits.' };
     }
     if (current.phase === 'input') {
       const value = key.label === 'EXP' ? 'e' : key.value;
       if (typeof value === 'string' && /^(?:[\d.eE+−\-×÷*/()]+|Ans|π)$/.test(value)) {
         // Use the injected editor's length rules, without replacing the outer expression.
-        const edited = ctx.append({ ...state, expression: current.input, evaluated: false }, value);
+        const edited = ctx.append({ ...state, expression: current.input, cursor: null, evaluated: false }, value);
         return { ...editInput(state, edited.expression, ctx), notice: edited.notice, modifier: '' };
       }
     }
     return { ...state, notice: 'EXE confirms; ◀/▶ navigates; AC exits.' };
   },
   expression: {
-    startsPrimary: remaining => /^FMLA0[1-5]\(/i.test(remaining),
+    startsPrimary: remaining => /^FMLA(?:0[1-9]|1[0-9]|2[0-3])\(/i.test(remaining),
     parsePrimary(parser) {
-      const match = parser.remaining.match(/^FMLA(0[1-5])\(/i);
+      const match = parser.remaining.match(/^FMLA(0[1-9]|1[0-9]|2[0-3])\(/i);
       if (!match) return;
       parser.consume(match[0].length);
       const formula = getFormula(Number(match[1])), values = [];

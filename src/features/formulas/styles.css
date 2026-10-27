@@ -7,9 +7,13 @@
 .formulas-screen input::placeholder { color: inherit; opacity: .6; }
 .formulas-title { display: flex; align-items: center; justify-content: space-between; height: 17px; flex-shrink: 0; font-size: 12px; white-space: nowrap; }
 .formulas-title > span { font-size: 9px; }
-.formulas-number { width: 42px; text-align: right; font-size: 17px; }
-.formulas-picker, .formulas-entry, .formulas-result-row { display: flex; align-items: center; gap: 3px; min-width: 0; height: 32px; flex-shrink: 0; }
-.formulas-picker > .formulas-choice { flex: 1; font-size: 14px; text-align: left; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.formulas-number { width: 38px; text-align: center; font-size: 24px; }
+.formulas-entry, .formulas-result-row { display: flex; align-items: center; gap: 3px; min-width: 0; height: 32px; flex-shrink: 0; }
+.formulas-picker { display: flex; align-items: flex-start; gap: 3px; min-width: 0; height: 51px; flex-shrink: 0; }
+.formulas-selection { flex: 1; min-width: 0; }
+.formulas-number-entry { display: flex; align-items: baseline; justify-content: flex-end; font-size: 24px; }
+.formulas-navigation { display: flex; flex-direction: column; }
+.formulas-selection > .formulas-choice { max-width: 100%; padding: 0; font-size: 14px; text-align: left; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .formulas-field { display: flex; gap: 4px; align-items: baseline; min-width: 0; flex: 1; font-size: 22px; }
 .formulas-field input { width: 100%; font-size: 21px; }
 .formulas-hint { height: 13px; font-size: 9px; line-height: 12px; white-space: nowrap; overflow: hidden; }

@@ -1,0 +1,17 @@
+.complex-screen { height: 70px; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.complex-screen button, .complex-expression { color: inherit; background: transparent; border: 0; border-radius: 2px; font-family: inherit; }
+.complex-screen button { padding: 2px 4px; font-size: 11px; cursor: pointer; }
+.complex-screen button:hover { background: #536b591c; }
+.complex-title { height: 17px; font-size: 12px; }
+.complex-options { display: flex; justify-content: space-between; align-items: center; height: 32px; }
+.complex-options button { font-size: 14px; }
+.complex-expression { width: 100%; height: 20px; min-width: 0; padding: 0; font-size: 14px; outline-offset: 0; }
+.complex-expression::placeholder { color: inherit; opacity: .5; }
+.complex-result-row { height: 29px; display: flex; align-items: center; gap: 4px; min-width: 0; }
+.complex-result-row button { padding: 2px 0; font-size: 9px; flex-shrink: 0; }
+.complex-result { flex: 1; min-width: 0; text-align: right; font-size: 25px; white-space: nowrap; overflow-x: auto; scrollbar-width: none; }
+.complex-scale { font-size: 16px; }
+.complex-scale sup { font-size: 11px; }
+.complex-imaginary { padding-left: 2px; font-size: 15px; }
+.complex-error { font-size: 20px; }
+.complex-hint { height: 13px; line-height: 12px; font-size: 8px; white-space: nowrap; overflow: hidden; }

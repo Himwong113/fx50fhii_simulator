@@ -26,22 +26,46 @@ export function createCalculator({ math, features = [] } = {}) {
     }
   }
   const evaluate = createEvaluator({ math, features: modules });
+  function modeFeature(state) {
+    return modules.find(feature => feature.isModeActive?.(state));
+  }
   function evaluateState(state, expression = state.expression) {
-    return evaluate(expression, state.answer, state.answerFraction, state.answerMode, state.features);
+    const service = modeFeature(state)?.createMath?.(math) ?? math;
+    const evaluator = service === math ? evaluate : createEvaluator({ math: service, features: modules });
+    return evaluator(expression, state.answer, state.answerFraction, state.answerMode, state.features);
   }
   function createInitialState() {
     return {
-      expression: '', result: '0', answer: 0, answerFraction: null, answerMode: 'decimal',
+      expression: '', cursor: null, result: '0', answer: 0, answerFraction: null, answerMode: 'decimal',
       resultMode: 'decimal', evaluated: false, modifier: '', activeFeature: null,
       lastKey: '—', notice: 'Ready for your first calculation.', history: [],
       features: Object.fromEntries(modules.map(f => [f.id, structuredClone(f.initialState ?? {})])),
     };
   }
+  function getCursorPosition(state) {
+    return Number.isInteger(state.cursor) ? Math.max(0, Math.min(state.expression.length, state.cursor)) : state.expression.length;
+  }
+  function deleteLength(prefix) {
+    return Math.max(prefix.endsWith('Ans') ? 3 : 1, ...modules.map(f => f.expression?.deleteLength?.(prefix) ?? 0));
+  }
+  function cursorStops(expression) {
+    const stops = [expression.length];
+    for (let position = expression.length; position > 0;) {
+      position = Math.max(0, position - deleteLength(expression.slice(0, position)));
+      stops.push(position);
+    }
+    return stops.reverse();
+  }
   function append(state, value, { continueResult = /^[×÷+−^]/.test(value) } = {}) {
     let expression = state.expression;
     if (state.evaluated) expression = continueResult ? 'Ans' : '';
     if (expression.length + value.length > 80) return { ...state, notice: 'Expression limit reached.' };
-    return { ...state, expression: expression + value, evaluated: false, result: '0', resultMode: 'decimal', modifier: '' };
+    const position = state.evaluated ? expression.length : getCursorPosition(state);
+    return {
+      ...state, expression: expression.slice(0, position) + value + expression.slice(position),
+      cursor: state.evaluated || state.cursor == null ? null : position + value.length,
+      evaluated: false, result: '0', resultMode: 'decimal', modifier: '',
+    };
   }
   function setResult(state, result, resultMode) {
     return {
@@ -51,12 +75,17 @@ export function createCalculator({ math, features = [] } = {}) {
   }
   function context(feature) {
     return {
-      math, evaluate, evaluateState, append, setResult,
+      math, evaluate, evaluateState, append, setResult, applyAction, getCursorPosition,
+      handleDefaultKey: (state, key) => reduceKey(state, key, false),
       getFeatureState: state => state.features[feature.id],
       setFeatureState: (state, patch) => ({ ...state, features: { ...state.features, [feature.id]: { ...state.features[feature.id], ...patch } } }),
       activate: state => ({ ...state, activeFeature: feature.id, modifier: '' }),
       deactivate: state => ({ ...state, activeFeature: null, modifier: '' }),
     };
+  }
+  function applyAction(state, key) {
+    const registered = actions.get(key.action);
+    return registered ? registered.handle(state, key, context(registered.feature)) : state;
   }
   function resolveKey(state, key) {
     if (key.action) return key;
@@ -66,8 +95,11 @@ export function createCalculator({ math, features = [] } = {}) {
     return { ...key, ...command, label: key.label ?? label };
   }
   function reducer(state, rawKey) {
+    return reduceKey(state, rawKey, true);
+  }
+  function reduceKey(state, rawKey, routeToFeature) {
     // An active feature owns input until it closes its screen.
-    const active = modules.find(f => f.id === state.activeFeature);
+    const active = routeToFeature ? modules.find(f => f.id === state.activeFeature) ?? modeFeature(state) : null;
     const key = active ? rawKey : resolveKey(state, rawKey);
     const next = { ...state, lastKey: key.label, notice: '' };
     if (active?.handleActiveKey) {
@@ -85,10 +117,21 @@ export function createCalculator({ math, features = [] } = {}) {
       return cleared;
     }
     if (key.action === 'modifier') return { ...next, modifier: state.modifier === key.label ? '' : key.label };
+    if (key.action === 'replay' && ['left', 'right'].includes(key.direction)) {
+      const position = getCursorPosition(state), stops = cursorStops(state.expression);
+      const cursor = state.evaluated ? (key.direction === 'left' ? state.expression.length : 0)
+        : key.direction === 'left' ? stops.filter(stop => stop < position).at(-1) ?? 0
+          : stops.find(stop => stop > position) ?? state.expression.length;
+      return { ...next, cursor, evaluated: false, modifier: '' };
+    }
     if (key.action === 'delete') {
-      const lengths = modules.map(f => f.expression?.deleteLength?.(state.expression) ?? 0);
-      const length = Math.max(state.expression.endsWith('Ans') ? 3 : 1, ...lengths);
-      return { ...next, expression: state.expression.slice(0, -length), evaluated: false, result: '0', resultMode: 'decimal' };
+      const position = state.evaluated ? state.expression.length : getCursorPosition(state);
+      const start = Math.max(0, position - deleteLength(state.expression.slice(0, position)));
+      return {
+        ...next, expression: state.expression.slice(0, start) + state.expression.slice(position),
+        cursor: state.evaluated || state.cursor == null ? null : start,
+        evaluated: false, result: '0', resultMode: 'decimal',
+      };
     }
     if (key.action === 'execute') {
       try {
@@ -96,19 +139,20 @@ export function createCalculator({ math, features = [] } = {}) {
         const result = String(evaluated.value);
         return {
           ...next, answer: evaluated.value, answerFraction: evaluated.fraction, answerMode: 'decimal',
-          result, resultMode: 'decimal', evaluated: true, modifier: '',
+          result, resultMode: 'decimal', evaluated: true, cursor: null, modifier: '',
           history: state.expression ? [{ expression: state.expression, result }, ...state.history].slice(0, 3) : state.history,
         };
-      } catch (error) { return { ...next, result: error.message, resultMode: 'decimal', evaluated: true, modifier: '' }; }
+      } catch (error) { return { ...next, result: error.message, resultMode: 'decimal', evaluated: true, cursor: null, modifier: '' }; }
     }
     if (key.value !== undefined) return append(next, key.value, { continueResult: key.continueResult });
     return { ...next, modifier: '', notice: `${key.label} selected · layout preview only.` };
   }
   return Object.freeze({
-    reducer, evaluate, evaluateState, createInitialState, resolveKey,
+    reducer, evaluate, evaluateState, createInitialState, resolveKey, getCursorPosition,
     calculate: (expression, answer = 0) => evaluate(expression, answer).value,
     formatExpression: expression => modules.reduce((text, f) => f.expression?.format?.(text) ?? text, expression),
-    getStatus: state => modules.find(f => f.id === state.activeFeature)?.status?.(state) ?? 'COMP',
+    getModeFeatureId: state => modeFeature(state)?.id ?? null,
+    getStatus: state => (modules.find(f => f.id === state.activeFeature) ?? modeFeature(state))?.status?.(state) ?? 'COMP',
     featureIds: Object.freeze([...ids]),
   });
 }

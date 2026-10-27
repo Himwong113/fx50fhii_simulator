@@ -25,6 +25,7 @@ export function createEvaluator({ math, features }) {
         position += count;
       },
       readExpression: () => sum(),
+      readPower: () => power(true),
       closeOptionalGroup() {
         if (source[position] === ')') position++;
         else if (position !== source.length) throw new Error('Syntax ERROR');
@@ -63,14 +64,26 @@ export function createEvaluator({ math, features }) {
       if (source[position] === '^') { position++; return math.binary('^', base, power(true)); }
       return base;
     }
+    function factor() {
+      let base = power();
+      for (const feature of features) {
+        const before = position;
+        const value = feature.expression?.parsePostfix?.(parser, base);
+        if (value !== undefined) {
+          if (position <= before) throw new Error(`Feature ${feature.id} must consume its postfix expression`);
+          base = value;
+        } else if (position !== before) throw new Error(`Feature ${feature.id} consumed an unmatched postfix expression`);
+      }
+      return base;
+    }
     function implicitProduct() {
-      let value = power();
+      let value = factor();
       while (true) {
         const remaining = source.slice(position), prefix = source.slice(0, position), next = source[position] || '';
         const startsFactor = next === '(' || next === 'π' || remaining.startsWith('Ans') || features.some(f => f.expression?.startsPrimary?.(remaining));
         const followsValue = prefix.endsWith(')') || prefix.endsWith('π') || prefix.endsWith('Ans') || features.some(f => f.expression?.endsPrimary?.(prefix));
         if (!startsFactor && !(followsValue && /[\d.]/.test(next))) break;
-        value = math.binary('*', value, power());
+        value = math.binary('*', value, factor());
       }
       return value;
     }
@@ -92,6 +105,7 @@ export function createEvaluator({ math, features }) {
     }
     const scalar = source ? sum() : math.fraction(0n);
     if (position !== source.length) throw new Error('Syntax ERROR');
+    if (math.finalize) return { ...math.finalize(scalar), ...metadata };
     const value = math.numeric(scalar);
     if (!Number.isFinite(value)) throw new Error('Math ERROR');
     return { value: Number(value.toPrecision(12)), fraction: math.serialize(scalar), ...metadata };
