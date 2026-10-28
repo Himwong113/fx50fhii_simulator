@@ -4,10 +4,24 @@ function closeMenu(state, ctx) {
   return ctx.deactivate(ctx.setFeatureState(state, { menu: null }));
 }
 function openMenu(state, ctx) {
-  return ctx.activate(ctx.setFeatureState(state, { menu: state.modifier === 'SHIFT' ? 'format' : 'mode' }));
+  const current = ctx.getFeatureState(state);
+  const menu = state.modifier === 'SHIFT' ? 'format' : 'mode';
+  return ctx.activate(ctx.setFeatureState(state, { menu, modePage: menu === 'mode' && current.menu === 'mode' ? 1 - current.modePage : 0 }));
 }
 function selectMode(state, mode, ctx) {
-  if (![1, 2].includes(mode)) return { ...state, notice: 'Choose 1: COMP or 2: CMPLX.' };
+  if (mode === 5 && state.features.regression) {
+    return ctx.applyAction(selectMode(state, 1, ctx), { action: 'regression.mode' });
+  }
+  if (mode === 3 && state.features.base) {
+    return ctx.applyAction(selectMode(state, 1, ctx), { action: 'base.mode' });
+  }
+  if (mode === 4 && state.features.statistics) {
+    return ctx.applyAction(selectMode(state, 1, ctx), { action: 'statistics.mode' });
+  }
+  if (![1, 2].includes(mode)) return { ...state, modifier: '', notice: `${{ 3: 'BASE', 4: 'SD', 5: 'REG', 6: 'PRGM' }[mode] ?? 'This mode'} is not available yet.` };
+  state = ctx.applyAction(state, { action: 'statistics.leave' });
+  state = ctx.applyAction(state, { action: 'base.leave' });
+  state = ctx.applyAction(state, { action: 'regression.leave' });
   const current = ctx.getFeatureState(state);
   const answer = state.answerMode === 'complex' ? current.answer : { re: state.answer, im: 0 };
   const next = ctx.setFeatureState(state, { enabled: mode === 2, menu: null, answer, result: null, component: 0 });
@@ -56,7 +70,7 @@ function selectFormat(state, format, ctx) {
 
 export default {
   id: 'complex', priority: 100,
-  initialState: { enabled: false, menu: null, format: 'rectangular', answer: { re: 0, im: 0 }, result: null, component: 0 },
+  initialState: { enabled: false, menu: null, modePage: 0, format: 'rectangular', answer: { re: 0, im: 0 }, result: null, component: 0 },
   bindings: [{ key: 'MODE', action: 'complex.open' }],
   screen: true,
   isModeActive: state => state.features.complex.enabled,
@@ -66,6 +80,7 @@ export default {
     'complex.open': (state, key, ctx) => openMenu(state, ctx),
     'complex.close': (state, key, ctx) => closeMenu(state, ctx),
     'complex.mode': (state, key, ctx) => selectMode(state, key.mode, ctx),
+    'complex.mode-page': (state, key, ctx) => ctx.setFeatureState(state, { modePage: 1 - ctx.getFeatureState(state).modePage }),
     'complex.format': (state, key, ctx) => selectFormat(state, key.format, ctx),
     'complex.edit': (state, key, ctx) => edit(state, key.text, ctx, key.cursor),
     'complex.cursor': (state, key) => ({ ...state, cursor: key.position }),
@@ -90,7 +105,10 @@ export default {
     const current = ctx.getFeatureState(state);
     if (current.menu) {
       if (['clear', 'on', 'delete'].includes(key.action)) return closeMenu(state, ctx);
-      if (current.menu === 'mode' && /^[12]$/.test(key.label)) return selectMode(state, Number(key.label), ctx);
+      if (current.menu === 'mode' && key.action === 'replay' && ['left', 'right'].includes(key.direction)) {
+        return ctx.setFeatureState(state, { modePage: 1 - current.modePage });
+      }
+      if (current.menu === 'mode' && /^[1-6]$/.test(key.label)) return selectMode(state, Number(key.label), ctx);
       if (current.menu === 'format' && /^[12]$/.test(key.label)) return selectFormat(state, key.label === '1' ? 'rectangular' : 'polar', ctx);
       return state;
     }

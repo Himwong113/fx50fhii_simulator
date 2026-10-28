@@ -1,0 +1,9 @@
+.base-screen { height: 70px; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.base-expression { height: 20px; font-size: 14px; white-space: nowrap; overflow-x: auto; scrollbar-width: none; }
+.base-result-row { height: 29px; display: flex; align-items: baseline; gap: 5px; }
+.base-result { min-width: 0; flex: 1; font-size: 25px; text-align: right; white-space: nowrap; overflow-x: auto; scrollbar-width: none; }
+.base-symbol { font-size: 12px; }
+.base-options { height: 13px; display: flex; align-items: center; justify-content: space-between; gap: 2px; font-size: 8px; }
+.base-options button { color: inherit; background: transparent; border: 0; font: inherit; cursor: pointer; padding: 0 3px; }
+.base-options button[aria-pressed="true"] { text-decoration: underline; font-weight: bold; }
+.base-options button:hover { background: #536b591c; }

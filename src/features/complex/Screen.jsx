@@ -22,12 +22,18 @@ export default function ComplexScreen({ state, featureState: current, dispatch, 
     return () => window.removeEventListener('keydown', onKey);
   }, [current.menu, dispatch]);
   if (current.menu === 'mode') return <div className="complex-screen" aria-label="Calculation mode">
-    <div className="complex-title">Calculation mode</div>
+    <div className="complex-title">Calculation mode · {current.modePage + 1}/2</div>
     <div className="complex-options">
-      <button type="button" aria-label="Mode 1 COMP" onClick={() => send('mode', { mode: 1 })}>1: COMP</button>
-      <button type="button" aria-label="Mode 2 CMPLX" onClick={() => send('mode', { mode: 2 })}>2: CMPLX</button>
+      {(current.modePage === 0 ? [[1, 'COMP', true], [2, 'CMPLX', true], [3, 'BASE', !!state.features.base]]
+        : [[4, 'SD', !!state.features.statistics], [5, 'REG', !!state.features.regression], [6, 'PRGM', false]]).map(([mode, name, available]) =>
+        <button type="button" key={mode} aria-label={`Mode ${mode} ${name}`} title={available ? name : `${name} is not available yet`}
+          className={available ? undefined : 'complex-mode-unavailable'} onClick={() => send('mode', { mode })}>{mode}: {name}</button>)}
     </div>
-    <div className="complex-hint">1: Normal · 2: Complex · AC cancels</div>
+    <div className="complex-mode-navigation">
+      <button type="button" aria-label="Previous mode page" onClick={() => send('mode-page')}>◀</button>
+      <span>REPLAY ◀/▶: page · AC cancels</span>
+      <button type="button" aria-label="Next mode page" onClick={() => send('mode-page')}>▶</button>
+    </div>
   </div>;
   if (current.menu === 'format') return <div className="complex-screen" aria-label="Complex display format">
     <div className="complex-title">Complex format ({(calculator.getMath(state).angleUnit ?? 'deg').toUpperCase()})</div>

@@ -51,10 +51,10 @@ export default function SetupScreen({ featureState: current, dispatch }) {
       </div>
       <div className="setup-hint">◀/▶ adjusts · AC exits</div>
     </> : <>
-      <div className="setup-title">{current.menu === 'clear' ? 'Clear settings' : 'Reset setup?'}</div>
-      <div className="setup-options">{current.menu === 'clear' ? choice('Setup', 2)
-        : <button type="button" aria-label="Confirm setup reset" onClick={() => send('reset')}>EXE: Reset setup</button>}</div>
-      <div className="setup-hint">{current.menu === 'clear' ? '2 selects setup reset · AC cancels' : 'EXE confirms · AC cancels'}</div>
+      <div className="setup-title">{current.menu === 'clear' ? 'Clear' : current.menu === 'confirm-stat' ? 'Clear statistics data?' : 'Reset setup?'}</div>
+      <div className="setup-options">{current.menu === 'clear' ? <>{choice('Stat', 1)}{choice('Setup', 2)}</>
+        : <button type="button" aria-label={current.menu === 'confirm-stat' ? 'Confirm statistics clear' : 'Confirm setup reset'} onClick={() => send('reset')}>EXE: {current.menu === 'confirm-stat' ? 'Clear data' : 'Reset setup'}</button>}</div>
+      <div className="setup-hint">EXE confirms · AC cancels</div>
     </>}
   </div>;
 }

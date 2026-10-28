@@ -25,7 +25,8 @@ function choose(state, digit, ctx) {
   const current = ctx.getFeatureState(state);
   if (!Number.isInteger(digit) || digit < 0 || digit > 9) return state;
   if (current.menu === 'clear') {
-    return digit === 2 ? ctx.setFeatureState(state, { menu: 'confirm-reset' }) : state;
+    return digit === 1 ? ctx.setFeatureState(state, { menu: 'confirm-stat' })
+      : digit === 2 ? ctx.setFeatureState(state, { menu: 'confirm-reset' }) : state;
   }
   if (current.menu === 'fix' || current.menu === 'sci') {
     return close(ctx.setFeatureState(state, { display: current.menu, digits: current.menu === 'sci' && digit === 0 ? 10 : digit }), ctx);
@@ -46,13 +47,22 @@ function choose(state, digit, ctx) {
       if (![1, 2].includes(digit)) return state;
       return close(ctx.applyAction(state, { action: 'complex.format', format: digit === 1 ? 'rectangular' : 'polar' }), ctx);
     case 'frequency':
-      return [1, 2].includes(digit) ? close(ctx.setFeatureState(state, { frequency: digit === 1 }), ctx) : state;
+      if (![1, 2].includes(digit)) return state;
+      if (current.frequency !== (digit === 1)) {
+        state = ctx.applyAction(state, { action: 'statistics.clear-data' });
+        state = ctx.applyAction(state, { action: 'regression.clear-data' });
+      }
+      return close(ctx.setFeatureState(state, { frequency: digit === 1 }), ctx);
     case 'contrast':
       return digit === 1 ? ctx.setFeatureState(state, { menu: 'contrast' }) : state;
     default: return state;
   }
 }
 function reset(state, ctx) {
+  if (ctx.getFeatureState(state).menu === 'confirm-stat') {
+    const next = ctx.applyAction(state, { action: 'statistics.clear-data' });
+    return close(ctx.applyAction(next, { action: 'regression.clear-data' }), ctx);
+  }
   if (ctx.getFeatureState(state).menu !== 'confirm-reset') return state;
   let next = ctx.setFeatureState(state, { ...defaults, menu: null, page: 0, returnFeature: null });
   next = ctx.applyAction(next, { action: 'complex.mode', mode: 1 });
